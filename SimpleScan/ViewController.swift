@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     var scanButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .lightGray
-        button.setTitle("Scan", for: .normal)
+        button.setTitle(NSLocalizedString("Scan", comment: ""), for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(scanButtoTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     var pdfButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .lightGray
-        button.setTitle("PDF", for: .normal)
+        button.setTitle(NSLocalizedString("Create PDF", comment: ""), for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.setTitleColor(.gray, for: .disabled)
         button.addTarget(self, action: #selector(pdfButtonTapped(_:)), for: .touchUpInside)
@@ -121,6 +121,8 @@ class ViewController: UIViewController {
             
         } else {
             
+            #if targetEnvironment(simulator)
+            // Simulator
             let pdfDocument = PDFDocument()
             if let tifImage = UIImage(named: "simple.tif") {
                 if let pdfPage = PDFPage(image: tifImage) {
@@ -128,6 +130,15 @@ class ViewController: UIViewController {
                     pdfView.document = pdfDocument
                 }
             }
+            #else
+            // Real device
+            let alert = UIAlertController(title: "No scan", message: "Scan before doing PDF.", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                
+            })
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+            #endif
             
         }
         
