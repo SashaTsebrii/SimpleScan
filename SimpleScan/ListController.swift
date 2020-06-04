@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import VisionKit
+import PDFKit
 
 class ListController: UIViewController {
     
@@ -80,7 +82,9 @@ class ListController: UIViewController {
     
     @objc fileprivate func scanBarButtonTapped(_ sendr: UIBarButtonItem) {
         
-        
+        let scannerViewController = VNDocumentCameraViewController()
+        scannerViewController.delegate = self
+        present(scannerViewController, animated: true)
         
     }
     
@@ -186,6 +190,58 @@ extension ListController: UICollectionViewDataSource, UICollectionViewDelegate, 
         
         return lineSpacing
         
+    }
+    
+}
+
+extension ListController: VNDocumentCameraViewControllerDelegate {
+    
+    // MARK: VNDocumentCameraViewControllerDelegate
+    
+    func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
+        guard scan.pageCount >= 1 else {
+            controller.dismiss(animated: true)
+            return
+        }
+        
+        DispatchQueue.main.async {
+            
+            let pdfDocument = PDFDocument()
+            
+            for i in 0 ..< scan.pageCount {
+                // Set image size
+                if let image = scan.imageOfPage(at: i).resize(toWidth: 800) {
+                    print("Image size is \(image.size.width), \(image.size.height)")
+                    // Create a PDF page instance from your image
+                    let pdfPage = PDFPage(image: image)
+                    // Insert the PDF page into your document
+                    pdfDocument.insert(pdfPage!, at: i)
+                }
+            }
+            
+            // Get the raw data of your PDF document
+            let data = pdfDocument.dataRepresentation()
+            
+            let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let documentURL = documentDirectory.appendingPathComponent("Name")
+            do {
+                try data?.write(to: documentURL)
+            } catch (let error) {
+                print("Error save data to URL: \(error.localizedDescription)")
+            }
+        }
+        
+        controller.dismiss(animated: true)
+                
+    }
+    
+    func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
+        print("Error in CameraViewController: \(error)")
+        controller.dismiss(animated: true)
+    }
+    
+    func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
+        controller.dismiss(animated: true)
     }
     
 }
