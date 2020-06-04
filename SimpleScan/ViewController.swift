@@ -132,7 +132,7 @@ class ViewController: UIViewController {
             }
             #else
             // Real device
-            let alert = UIAlertController(title: "No scan", message: "Scan before doing PDF.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "No scan", message: "You must scan before making a PDF.", preferredStyle: .alert)
             let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
                 
             })
