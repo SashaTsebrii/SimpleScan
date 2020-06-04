@@ -47,130 +47,43 @@ class ListController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Set title
+        title = NSLocalizedString("List", comment: "")
+        
+        // Create left bar button item
+        let settingsBarButton = UIBarButtonItem(title: NSLocalizedString("Settings", comment: ""), style: .plain, target: self, action: #selector(settingsBarButtonTapped(_:)))
+        navigationItem.leftBarButtonItem = settingsBarButton
+        
+        // Create right bar button item
+        let scanBarButton = UIBarButtonItem(title: NSLocalizedString("Scan", comment: ""), style: .plain, target: self, action: #selector(scanBarButtonTapped(_:)))
+        navigationItem.rightBarButtonItem = scanBarButton
+        
+        // Set documents
+        documents = [Document(name: "First", createDate: Date(timeIntervalSinceNow: 60), pdfUrl: nil),
+                     Document(name: "Second", createDate: Date(timeIntervalSinceNow: 60 * 2), pdfUrl: nil),
+                     Document(name: "Third", createDate: Date(timeIntervalSinceNow: 60 * 3), pdfUrl: nil),
+                     Document(name: "Fourth", createDate: Date(timeIntervalSinceNow: 60 * 4), pdfUrl: nil),
+                     Document(name: "Fifth", createDate: Date(timeIntervalSinceNow: 60 * 5), pdfUrl: nil)]
+        
+        collectionView.reloadData()
+        
     }
     
     // MARK: Actions
     
-    @objc func scanButtoTapped(_ sender: UIButton) {
+    @objc fileprivate func settingsBarButtonTapped(_ sendr: UIBarButtonItem) {
         
-        #if targetEnvironment(simulator)
-        // Simulator
-        let alert = UIAlertController(title: "Camera not available", message: "You are using a simulator, the camera is available only on a real device.", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
-            
-        })
-        alert.addAction(okAction)
-        self.present(alert, animated: true, completion: nil)
-        #else
-        // Real device
-        let scannerViewController = VNDocumentCameraViewController()
-        scannerViewController.delegate = self
-        present(scannerViewController, animated: true)
-        #endif
+        let settingsController = SettingsController()
+        navigationController?.pushViewController(settingsController, animated: true)
         
     }
     
-    @objc func pdfButtonTapped(_ sender: UIButton) {
+    @objc fileprivate func scanBarButtonTapped(_ sendr: UIBarButtonItem) {
         
-        if wasScaned {
-            
-            let fileManager = FileManager.default
-            if let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
-                
-                let docURL = documentDirectory.appendingPathComponent(Constants.fileName)
-                if fileManager.fileExists(atPath: docURL.path) {
-                    pdfView.document = PDFDocument(url: docURL)
-                } else {
-                    print("Error load file from URL")
-                }
-                
-            }
-            
-        } else {
-            
-            #if targetEnvironment(simulator)
-            // Simulator
-            let pdfDocument = PDFDocument()
-            if let tifImage = UIImage(named: "simple.tif") {
-                if let pdfPage = PDFPage(image: tifImage) {
-                    pdfDocument.insert(pdfPage, at: 0)
-                    pdfView.document = pdfDocument
-                }
-            }
-            #else
-            // Real device
-            let alert = UIAlertController(title: "No scan", message: "You must scan before making a PDF.", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
-                
-            })
-            alert.addAction(okAction)
-            self.present(alert, animated: true, completion: nil)
-            #endif
-            
-        }
+        
         
     }
     
-}
-
-extension ViewController: VNDocumentCameraViewControllerDelegate {
-    
-    // MARK: VNDocumentCameraViewControllerDelegate
-    
-    func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
-        guard scan.pageCount >= 1 else {
-            controller.dismiss(animated: true)
-            return
-        }
-        
-        DispatchQueue.main.async {
-            
-            let pdfDocument = PDFDocument()
-            
-            for i in 0 ..< scan.pageCount {
-                // Set image size
-                if let image = scan.imageOfPage(at: i).resize(toWidth: 800) {
-                    print("Image size is \(image.size.width), \(image.size.height)")
-                    // Create a PDF page instance from your image
-                    let pdfPage = PDFPage(image: image)
-                    // Insert the PDF page into your document
-                    pdfDocument.insert(pdfPage!, at: i)
-                }
-            }
-            
-            // Get the raw data of your PDF document
-            let data = pdfDocument.dataRepresentation()
-            
-            let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let documentURL = documentDirectory.appendingPathComponent(Constants.fileName)
-            do {
-                try data?.write(to: documentURL)
-            } catch (let error) {
-                print("Error save data to URL: \(error.localizedDescription)")
-            }
-        }
-        
-        controller.dismiss(animated: true)
-        
-        wasScaned = true
-        
-    }
-    
-    func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
-        print("Error in CameraViewController: \(error)")
-        controller.dismiss(animated: true)
-    }
-    
-    func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
-        controller.dismiss(animated: true)
-    }
-    
-}
-
-// MARK: Constants
-
-struct Constants {
-    static let fileName = "Last_scanned_document.pdf"
 }
 
 extension ListController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
