@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ListController.swift
 //  SimpleScan
 //
 //  Created by Aleksandr Tsebrii on 6/3/20.
@@ -7,43 +7,24 @@
 //
 
 import UIKit
-import VisionKit
-import PDFKit
-import AVFoundation
 
-class ViewController: UIViewController {
+class ListController: UIViewController {
     
     // MARK: Variables
     
-    var wasScaned: Bool = false
+    var documents: [Document] = []
     
     // MARK: Properties
     
-    var scanButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .lightGray
-        button.setTitle(NSLocalizedString("Scan", comment: ""), for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.addTarget(self, action: #selector(scanButtoTapped(_:)), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    var pdfButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .lightGray
-        button.setTitle(NSLocalizedString("Create PDF", comment: ""), for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.setTitleColor(.gray, for: .disabled)
-        button.addTarget(self, action: #selector(pdfButtonTapped(_:)), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    var pdfView: PDFView = {
-        let pdfView = PDFView()
-        pdfView.translatesAutoresizingMaskIntoConstraints = false
-        return pdfView
+    lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(ListCell.self, forCellWithReuseIdentifier: ListCell.identifier)
+        collectionView.alwaysBounceVertical = true
+        collectionView.backgroundColor = .clear
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
     }()
     
     // MARK: Lifecycle
@@ -51,28 +32,14 @@ class ViewController: UIViewController {
     override func loadView() {
         super.loadView()
         
-        view.addSubview(pdfView)
-        NSLayoutConstraint.activate([
-            pdfView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            pdfView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            pdfView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            pdfView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        view.backgroundColor = .white
         
-        let stackView = UIStackView(arrangedSubviews: [scanButton, pdfButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.alignment = .fill
-        stackView.spacing = 8
-        stackView.backgroundColor = .red
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(stackView)
+        view.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            stackView.heightAnchor.constraint(equalToConstant: 64),
-            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
     }
@@ -206,15 +173,106 @@ struct Constants {
     static let fileName = "Last_scanned_document.pdf"
 }
 
-// MARK: UIImage extension
-
-extension UIImage {
+extension ListController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    func resize(toWidth width: CGFloat) -> UIImage? {
-        let canvas = CGSize(width: width, height: CGFloat(ceil(width / size.width * size.height)))
-        return UIGraphicsImageRenderer(size: canvas, format: imageRendererFormat).image {
-            _ in draw(in: CGRect(origin: .zero, size: canvas))
+    // MARK: UICollectionViewDataSource
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return documents.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCell.identifier, for: indexPath) as? ListCell else {
+            fatalError("Unexpected cell instead of ListCell")
         }
+        
+        let document = documents[indexPath.row]
+        cell.document = document
+        
+        return cell
+        
+    }
+    
+    // MARK: UICollectionViewDelegate
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let previewController = PreviewController()
+        navigationController?.pushViewController(previewController, animated: true)
+        
+    }
+    
+    // MARK: UICollectionViewDelegateFlowLayout
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        var optimalWidth: CGFloat = 0
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            // iPhone
+            optimalWidth = (view.bounds.width - 8 - 16) / 2
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            // iPad
+            optimalWidth = (view.bounds.width - 16 - 32) / 2
+        }
+        
+        let itemSize = CGSize(width: optimalWidth, height: optimalWidth)
+        
+        return itemSize
+        
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            // iPhone
+            edgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            // iPad
+            edgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        }
+        
+        return edgeInsets
+        
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        
+        var interitemSpacing: CGFloat = 0
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            // iPhone
+            interitemSpacing = 8
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            // iPad
+            interitemSpacing = 16
+        }
+        
+        return interitemSpacing
+        
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        var lineSpacing: CGFloat = 0
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            // iPhone
+            lineSpacing = 8
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            // iPad
+            lineSpacing = 16
+        }
+        
+        return lineSpacing
+        
     }
     
 }
