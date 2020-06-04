@@ -20,6 +20,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationController = UINavigationController(rootViewController: listController)
         window!.rootViewController = navigationController
         window!.makeKeyAndVisible()
+        
+        UINavigationBar.appearance().barTintColor = UIColor.black.withAlphaComponent(0.8)
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
+        
+        window?.tintColor = UIColor.white
                 
         return true
     }
