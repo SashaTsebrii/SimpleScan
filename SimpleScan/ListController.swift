@@ -66,9 +66,8 @@ class ListController: UIViewController {
                      Document(name: "Third", createDate: Date(timeIntervalSinceNow: 60 * 3), pdfUrl: nil),
                      Document(name: "Fourth", createDate: Date(timeIntervalSinceNow: 60 * 4), pdfUrl: nil),
                      Document(name: "Fifth", createDate: Date(timeIntervalSinceNow: 60 * 5), pdfUrl: nil)]
-        
         collectionView.reloadData()
-        
+    
     }
     
     // MARK: Actions
@@ -85,6 +84,19 @@ class ListController: UIViewController {
         let scannerViewController = VNDocumentCameraViewController()
         scannerViewController.delegate = self
         present(scannerViewController, animated: true)
+        
+    }
+    
+    // MARK: Helper
+    
+    func craatePreviewController(for index: Int) -> PreviewController {
+        
+        let previewController = PreviewController()
+        
+        let document = documents[index]
+        previewController.document = document
+        
+        return previewController
         
     }
     
@@ -119,7 +131,7 @@ extension ListController: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let previewController = PreviewController()
+        let previewController = craatePreviewController(for: indexPath.item)
         navigationController?.pushViewController(previewController, animated: true)
         
     }
