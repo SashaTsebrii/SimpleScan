@@ -103,34 +103,7 @@ class ListController: UIViewController {
     
     // MARK: CoreData
     
-    func createDataWith(idString: String, nameString: String = "No name", createDateString: String, urlString: String) {
-            
-            //As we know that container is set up in the AppDelegates so we need to refer that container.
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-            
-            //We need to create a context from this container
-            let managedContext = appDelegate.persistentContainer.viewContext
-            
-            //Now let’s create an entity and new user records.
-            let documentEntity = NSEntityDescription.entity(forEntityName: "Document", in: managedContext)!
-            
-            //final, we need to add some data to our newly created record for each keys using
-                            
-                let document = NSManagedObject(entity: documentEntity, insertInto: managedContext)
-                document.setValue("\(idString)", forKeyPath: "idString")
-                document.setValue("\(nameString)", forKey: "nameString")
-                document.setValue("\(createDateString)", forKey: "createDateString")
-                document.setValue("\(urlString)", forKey: "urlString")
-
-            //Now we have set all the values. The next step is to save them inside the Core Data
-            
-            do {
-                try managedContext.save()
-               
-            } catch let error as NSError {
-                print("Could not save. \(error), \(error.userInfo)")
-            }
-        }
+    
         
         func retrieveData() {
             

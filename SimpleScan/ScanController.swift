@@ -10,6 +10,7 @@ import UIKit
 import VisionKit
 import PDFKit
 import AVFoundation
+import CoreData
 
 class ScanController: UIViewController {
     
@@ -57,21 +58,73 @@ class ScanController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
+        
         if self.isMovingFromParent {
-            
-            // TODO: Remove document path
-            
+            // Catch press to back bar button
         }
+        
     }
     
     // MARK: Actions
     
     @objc fileprivate func saveBarButtonTapped(_ sender: UIBarButtonItem) {
         
-        // TODO: Save document to CoreData maby create delegate to say collectionView in ListController to update data.
+        if let pdfDocument = pdfView.document {
+            
+            // Today date
+            let today = Date()
+            
+            // Create date string
+            let createDateFormatter = DateFormatter()
+            createDateFormatter.dateFormat = "MMM d, yyyy HH:mm"
+            let createDateString = createDateFormatter.string(from: today)
+            
+            // Id from current date string
+            let idFormatter = DateFormatter()
+            idFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            let idString = idFormatter.string(from: today)
+            
+            // Get the data of PDF document
+            let data = pdfDocument.dataRepresentation()
+            
+            // Get directory
+            let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let documentURL = documentDirectory.appendingPathComponent(idString)
+            let urlString = documentURL.path
+            
+            // Save document to directory
+            do {
+                try data?.write(to: documentURL)
+            } catch (let error) {
+                print("Error save data to URL: \(error.localizedDescription)")
+            }
+            
+            // Get reference to AppDelegatesrefer
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            
+            // Create a context
+            let managedContext = appDelegate.persistentContainer.viewContext
+            
+            // Create an entity and new document records
+            let documentEntity = NSEntityDescription.entity(forEntityName: Constants.kDocument.entityName, in: managedContext)!
+            
+            // Final add some data to newly created entity for each keys
+            let document = NSManagedObject(entity: documentEntity, insertInto: managedContext)
+            document.setValue("\(idString)", forKeyPath: Constants.kDocument.idString)
+            document.setValue("No name", forKey: Constants.kDocument.nameString)
+            document.setValue("\(createDateString)", forKey: Constants.kDocument.createDateString)
+            document.setValue("\(urlString)", forKey: Constants.kDocument.urlString)
+            
+            // After set all the values, save them inside the CoreData
+            do {
+                try managedContext.save()
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+            }
+            
+        }
         
-        navigationController?.popViewController(animated: true)
+        navigationController?.popToRootViewController(animated: true)
         
     }
     
@@ -82,22 +135,6 @@ class ScanController: UIViewController {
         let scannerViewController = VNDocumentCameraViewController()
         scannerViewController.delegate = self
         present(scannerViewController, animated: false)
-        
-    }
-    
-    fileprivate func pdf() {
-        
-        let fileManager = FileManager.default
-        if let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
-            
-            let docURL = documentDirectory.appendingPathComponent(Constants.fileName)
-            if fileManager.fileExists(atPath: docURL.path) {
-                pdfView.document = PDFDocument(url: docURL)
-            } else {
-                print("Error load file from URL")
-            }
-            
-        }
         
     }
     
@@ -115,6 +152,7 @@ extension ScanController: VNDocumentCameraViewControllerDelegate {
         
         DispatchQueue.main.async {
             
+            // Create PDF
             let pdfDocument = PDFDocument()
             
             for i in 0 ..< scan.pageCount {
@@ -128,37 +166,29 @@ extension ScanController: VNDocumentCameraViewControllerDelegate {
                 }
             }
             
-            // Get the raw data of your PDF document
-            let data = pdfDocument.dataRepresentation()
+            self.pdfView.document = pdfDocument
             
-            let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let documentURL = documentDirectory.appendingPathComponent(Constants.fileName)
-            do {
-                try data?.write(to: documentURL)
-            } catch (let error) {
-                print("Error save data to URL: \(error.localizedDescription)")
-            }
         }
         
         controller.dismiss(animated: true)
-        
-        pdf()
         
     }
     
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
         print("Error in CameraViewController: \(error)")
+        
         controller.dismiss(animated: true)
+        
+        navigationController?.popToRootViewController(animated: false)
+        
     }
     
     func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
+        
         controller.dismiss(animated: true)
+        
+        navigationController?.popToRootViewController(animated: false)
+        
     }
     
-}
-
-// MARK: Constants
-
-struct Constants {
-    static let fileName = "Last_scanned_document.pdf"
 }
