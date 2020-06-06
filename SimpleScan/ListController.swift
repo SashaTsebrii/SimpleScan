@@ -34,8 +34,13 @@ class ListController: UIViewController {
     override func loadView() {
         super.loadView()
         
+        // Set title
+        title = NSLocalizedString("List", comment: "")
+        
+        // Set background color
         view.backgroundColor = .white
         
+        // Collection view constraints
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -43,14 +48,6 @@ class ListController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Set title
-        title = NSLocalizedString("List", comment: "")
         
         // Create left bar button item
         let settingsBarButton = UIBarButtonItem(title: NSLocalizedString("Settings", comment: ""), style: .plain, target: self, action: #selector(settingsBarButtonTapped(_:)))
@@ -60,12 +57,16 @@ class ListController: UIViewController {
         let scanBarButton = UIBarButtonItem(title: NSLocalizedString("Scan", comment: ""), style: .plain, target: self, action: #selector(scanBarButtonTapped(_:)))
         navigationItem.rightBarButtonItem = scanBarButton
         
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
         // Set documents
-        documents = [Document(name: "First", createDate: Date(timeIntervalSinceNow: 60), pdfUrl: nil),
-                     Document(name: "Second", createDate: Date(timeIntervalSinceNow: 60 * 2), pdfUrl: nil),
-                     Document(name: "Third", createDate: Date(timeIntervalSinceNow: 60 * 3), pdfUrl: nil),
-                     Document(name: "Fourth", createDate: Date(timeIntervalSinceNow: 60 * 4), pdfUrl: nil),
-                     Document(name: "Fifth", createDate: Date(timeIntervalSinceNow: 60 * 5), pdfUrl: nil)]
+        
+        documents = [Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123")),
+                     Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123")),
+                     Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123"))]
         collectionView.reloadData()
     
     }
@@ -222,25 +223,44 @@ extension ListController: VNDocumentCameraViewControllerDelegate {
             
             for i in 0 ..< scan.pageCount {
                 // Set image size
-                if let image = scan.imageOfPage(at: i).resize(toWidth: 800) {
-                    print("Image size is \(image.size.width), \(image.size.height)")
-                    // Create a PDF page instance from your image
-                    let pdfPage = PDFPage(image: image)
-                    // Insert the PDF page into your document
-                    pdfDocument.insert(pdfPage!, at: i)
-                }
+                let image = scan.imageOfPage(at: i)
+                print("Image size is \(image.size.width), \(image.size.height)")
+                // Create a PDF page instance from your image
+                let pdfPage = PDFPage(image: image)
+                // Insert the PDF page into your document
+                pdfDocument.insert(pdfPage!, at: i)
             }
             
             // Get the raw data of your PDF document
             let data = pdfDocument.dataRepresentation()
             
-            let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let documentURL = documentDirectory.appendingPathComponent("Name")
-            do {
-                try data?.write(to: documentURL)
-            } catch (let error) {
-                print("Error save data to URL: \(error.localizedDescription)")
+            if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                // Create document createDate and id
+                let today = Date()
+                
+                let createDateFormatter = DateFormatter()
+                createDateFormatter.dateFormat = "MMM d, yyyy HH:mm"
+                let createDate = createDateFormatter.string(from: today)
+                
+                let idFormatter = DateFormatter()
+                idFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                let id = idFormatter.string(from: today)
+                
+                // Create document object
+                let document = Document(id: id, createDate: createDate, url: documentDirectory)
+                print(document)
+                
+                // TODO: Save document object to CoreData
+                
+                let documentURL = documentDirectory.appendingPathComponent(id)
+                
+                do {
+                    try data?.write(to: documentURL)
+                } catch (let error) {
+                    print("Error save data to URL: \(error.localizedDescription)")
+                }
             }
+            
         }
         
         controller.dismiss(animated: true)
