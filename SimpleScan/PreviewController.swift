@@ -7,15 +7,71 @@
 //
 
 import UIKit
+import PDFKit
 
 class PreviewController: UIViewController {
-
+    
+    // MARK: Variables
+    
+    var document: Document?
+    
+    // MARK: Prpperties
+    
+    var pdfView: PDFView = {
+        let pdfView = PDFView()
+        pdfView.translatesAutoresizingMaskIntoConstraints = false
+        return pdfView
+    }()
+    
+    // MARK: Lifecycle
+    
+    override func loadView() {
+        super.loadView()
+        
+        view.backgroundColor = .white
+        
+        // Pdf view constraints
+        view.addSubview(pdfView)
+        NSLayoutConstraint.activate([
+            pdfView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            pdfView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            pdfView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            pdfView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        
+        // Create right bar button item
+        let shareBarButton = UIBarButtonItem(title: NSLocalizedString("Share", comment: ""), style: .plain, target: self, action: #selector(shareBarButtonTapped(_:)))
+        navigationItem.rightBarButtonItem = shareBarButton
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Set title
         title = NSLocalizedString("Preview", comment: "")
-
+        
+        if let id = document?.id, let url = document?.url {
+                        
+            let fileManager = FileManager.default
+            
+            let fullUrl = url.appendingPathComponent(id)
+            if fileManager.fileExists(atPath: fullUrl.path) {
+                pdfView.document = PDFDocument(url: fullUrl)
+            } else {
+                print("Error load file from URL")
+            }
+            
+        }
+        
+    }
+    
+    // MARK: Actions
+    
+    @objc fileprivate func shareBarButtonTapped(_ sender: UIBarButtonItem) {
+        
+        
+        
     }
     
 }
