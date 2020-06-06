@@ -12,10 +12,11 @@
 		4711D519248797A100A782E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4711D517248797A100A782E8 /* LaunchScreen.storyboard */; };
 		47A774BD248963E3003E2603 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774BC248963E3003E2603 /* ListCell.swift */; };
 		47A774BF24896671003E2603 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4711D50C2487979E00A782E8 /* AppDelegate.swift */; };
-		47A774C124896D11003E2603 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774C024896D11003E2603 /* Document.swift */; };
 		47A774C324897AE5003E2603 /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774C224897AE5003E2603 /* PreviewController.swift */; };
 		47A774C724898199003E2603 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774C624898199003E2603 /* SettingsController.swift */; };
 		47A774C924898DE9003E2603 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774C824898DE9003E2603 /* Extensions.swift */; };
+		47A774EF248B8A00003E2603 /* simpleScan.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 47A774ED248B8A00003E2603 /* simpleScan.xcdatamodeld */; };
+		47A774F1248BB002003E2603 /* ScanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774F0248BB002003E2603 /* ScanController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,10 +27,11 @@
 		4711D518248797A100A782E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4711D51A248797A100A782E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		47A774BC248963E3003E2603 /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
-		47A774C024896D11003E2603 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		47A774C224897AE5003E2603 /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
 		47A774C624898199003E2603 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		47A774C824898DE9003E2603 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		47A774EE248B8A00003E2603 /* simpleScan.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = simpleScan.xcdatamodel; sourceTree = "<group>"; };
+		47A774F0248BB002003E2603 /* ScanController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,14 +66,15 @@
 			children = (
 				4711D50C2487979E00A782E8 /* AppDelegate.swift */,
 				47A774C824898DE9003E2603 /* Extensions.swift */,
-				47A774C024896D11003E2603 /* Document.swift */,
 				4711D5102487979E00A782E8 /* ListController.swift */,
 				47A774BC248963E3003E2603 /* ListCell.swift */,
+				47A774F0248BB002003E2603 /* ScanController.swift */,
 				47A774C224897AE5003E2603 /* PreviewController.swift */,
 				47A774C624898199003E2603 /* SettingsController.swift */,
 				4711D515248797A100A782E8 /* Assets.xcassets */,
 				4711D517248797A100A782E8 /* LaunchScreen.storyboard */,
 				4711D51A248797A100A782E8 /* Info.plist */,
+				47A774ED248B8A00003E2603 /* simpleScan.xcdatamodeld */,
 			);
 			path = SimpleScan;
 			sourceTree = "<group>";
@@ -146,12 +149,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47A774F1248BB002003E2603 /* ScanController.swift in Sources */,
 				47A774C724898199003E2603 /* SettingsController.swift in Sources */,
-				47A774C124896D11003E2603 /* Document.swift in Sources */,
 				47A774BF24896671003E2603 /* AppDelegate.swift in Sources */,
 				4711D5112487979E00A782E8 /* ListController.swift in Sources */,
 				47A774C324897AE5003E2603 /* PreviewController.swift in Sources */,
 				47A774BD248963E3003E2603 /* ListCell.swift in Sources */,
+				47A774EF248B8A00003E2603 /* simpleScan.xcdatamodeld in Sources */,
 				47A774C924898DE9003E2603 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +348,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		47A774ED248B8A00003E2603 /* simpleScan.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				47A774EE248B8A00003E2603 /* simpleScan.xcdatamodel */,
+			);
+			currentVersion = 47A774EE248B8A00003E2603 /* simpleScan.xcdatamodel */;
+			path = simpleScan.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 4711D5012487979E00A782E8 /* Project object */;
 }

@@ -9,6 +9,7 @@
 import UIKit
 import VisionKit
 import PDFKit
+import CoreData
 
 class ListController: UIViewController {
     
@@ -64,9 +65,9 @@ class ListController: UIViewController {
         
         // Set documents
         
-        documents = [Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123")),
-                     Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123")),
-                     Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123"))]
+//        documents = [Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123")),
+//                     Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123")),
+//                     Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123"))]
         collectionView.reloadData()
     
     }
@@ -82,9 +83,8 @@ class ListController: UIViewController {
     
     @objc fileprivate func scanBarButtonTapped(_ sendr: UIBarButtonItem) {
         
-        let scannerViewController = VNDocumentCameraViewController()
-        scannerViewController.delegate = self
-        present(scannerViewController, animated: true)
+        let scanController = ScanController()
+        navigationController?.pushViewController(scanController, animated: true)
         
     }
     
@@ -100,6 +100,131 @@ class ListController: UIViewController {
         return previewController
         
     }
+    
+    // MARK: CoreData
+    
+    func createDataWith(idString: String, nameString: String = "No name", createDateString: String, urlString: String) {
+            
+            //As we know that container is set up in the AppDelegates so we need to refer that container.
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            
+            //We need to create a context from this container
+            let managedContext = appDelegate.persistentContainer.viewContext
+            
+            //Now let’s create an entity and new user records.
+            let documentEntity = NSEntityDescription.entity(forEntityName: "Document", in: managedContext)!
+            
+            //final, we need to add some data to our newly created record for each keys using
+                            
+                let document = NSManagedObject(entity: documentEntity, insertInto: managedContext)
+                document.setValue("\(idString)", forKeyPath: "idString")
+                document.setValue("\(nameString)", forKey: "nameString")
+                document.setValue("\(createDateString)", forKey: "createDateString")
+                document.setValue("\(urlString)", forKey: "urlString")
+
+            //Now we have set all the values. The next step is to save them inside the Core Data
+            
+            do {
+                try managedContext.save()
+               
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+            }
+        }
+        
+        func retrieveData() {
+            
+            //As we know that container is set up in the AppDelegates so we need to refer that container.
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            
+            //We need to create a context from this container
+            let managedContext = appDelegate.persistentContainer.viewContext
+            
+            //Prepare the request of type NSFetchRequest  for the entity
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Document")
+            
+            fetchRequest.predicate = NSPredicate(format: "nameString = %@", "No name")
+            fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "createDateString", ascending: false)]
+            
+            do {
+                let result = try managedContext.fetch(fetchRequest)
+                for data in result as! [NSManagedObject] {
+                    print(data.value(forKey: "idString") as! String)
+                    print(data.value(forKey: "nameString") as! String)
+                    print(data.value(forKey: "createDateString") as! String)
+                    print(data.value(forKey: "urlString") as! String)
+                }
+            } catch {
+                print("Failed")
+            }
+            
+        }
+        
+//        func updateData(){
+//
+//            //As we know that container is set up in the AppDelegates so we need to refer that container.
+//            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//
+//            //We need to create a context from this container
+//            let managedContext = appDelegate.persistentContainer.viewContext
+//
+//            let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "Document")
+//            fetchRequest.predicate = NSPredicate(format: "username = %@", "Ankur1")
+//            do
+//            {
+//                let test = try managedContext.fetch(fetchRequest)
+//
+//                    let objectUpdate = test[0] as! NSManagedObject
+//                    objectUpdate.setValue("newName", forKey: "username")
+//                    objectUpdate.setValue("newmail", forKey: "email")
+//                    objectUpdate.setValue("newpassword", forKey: "password")
+//                    do{
+//                        try managedContext.save()
+//                    }
+//                    catch
+//                    {
+//                        print(error)
+//                    }
+//                }
+//            catch
+//            {
+//                print(error)
+//            }
+//
+//        }
+        
+//         func deleteData(){
+//
+//            //As we know that container is set up in the AppDelegates so we need to refer that container.
+//            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//
+//            //We need to create a context from this container
+//            let managedContext = appDelegate.persistentContainer.viewContext
+//
+//            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Document")
+//            fetchRequest.predicate = NSPredicate(format: "username = %@", "Ankur3")
+//
+//            do
+//            {
+//                let test = try managedContext.fetch(fetchRequest)
+//
+//                let objectToDelete = test[0] as! NSManagedObject
+//                managedContext.delete(objectToDelete)
+//
+//                do{
+//                    try managedContext.save()
+//                }
+//                catch
+//                {
+//                    print(error)
+//                }
+//
+//            }
+//            catch
+//            {
+//                print(error)
+//            }
+//        }
     
 }
 
@@ -203,77 +328,6 @@ extension ListController: UICollectionViewDataSource, UICollectionViewDelegate, 
         
         return lineSpacing
         
-    }
-    
-}
-
-extension ListController: VNDocumentCameraViewControllerDelegate {
-    
-    // MARK: VNDocumentCameraViewControllerDelegate
-    
-    func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
-        guard scan.pageCount >= 1 else {
-            controller.dismiss(animated: true)
-            return
-        }
-        
-        DispatchQueue.main.async {
-            
-            let pdfDocument = PDFDocument()
-            
-            for i in 0 ..< scan.pageCount {
-                // Set image size
-                let image = scan.imageOfPage(at: i)
-                print("Image size is \(image.size.width), \(image.size.height)")
-                // Create a PDF page instance from your image
-                let pdfPage = PDFPage(image: image)
-                // Insert the PDF page into your document
-                pdfDocument.insert(pdfPage!, at: i)
-            }
-            
-            // Get the raw data of your PDF document
-            let data = pdfDocument.dataRepresentation()
-            
-            if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                // Create document createDate and id
-                let today = Date()
-                
-                let createDateFormatter = DateFormatter()
-                createDateFormatter.dateFormat = "MMM d, yyyy HH:mm"
-                let createDate = createDateFormatter.string(from: today)
-                
-                let idFormatter = DateFormatter()
-                idFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                let id = idFormatter.string(from: today)
-                
-                // Create document object
-                let document = Document(id: id, createDate: createDate, url: documentDirectory)
-                print(document)
-                
-                // TODO: Save document object to CoreData
-                
-                let documentURL = documentDirectory.appendingPathComponent(id)
-                
-                do {
-                    try data?.write(to: documentURL)
-                } catch (let error) {
-                    print("Error save data to URL: \(error.localizedDescription)")
-                }
-            }
-            
-        }
-        
-        controller.dismiss(animated: true)
-                
-    }
-    
-    func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
-        print("Error in CameraViewController: \(error)")
-        controller.dismiss(animated: true)
-    }
-    
-    func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
-        controller.dismiss(animated: true)
     }
     
 }
