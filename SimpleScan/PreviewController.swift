@@ -51,18 +51,27 @@ class PreviewController: UIViewController {
         // Set title
         title = NSLocalizedString("Preview", comment: "")
         
-        if let id = document?.id, let url = document?.url {
-                        
-            let fileManager = FileManager.default
+        if let document = document {
             
-            let fullUrl = url.appendingPathComponent(id)
-            if fileManager.fileExists(atPath: fullUrl.path) {
-                pdfView.document = PDFDocument(url: fullUrl)
-            } else {
-                print("Error load file from URL")
+            if let idString = document.value(forKeyPath: "idString") as? String, let urlString = document.value(forKeyPath: "urlString") as? String {
+                            
+                let fileManager = FileManager.default
+                
+                if let url = URL(string: urlString) {
+                    
+                    let fullUrl = url.appendingPathComponent(idString)
+                    if fileManager.fileExists(atPath: fullUrl.path) {
+                        pdfView.document = PDFDocument(url: fullUrl)
+                    } else {
+                        print("Error load file from URL")
+                    }
+                    
+                }
+                
             }
             
         }
+        
         
     }
     

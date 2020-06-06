@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
         
-        window?.tintColor = UIColor.white
+        window?.tintColor = .black
                 
         return true
     }
