@@ -9,7 +9,16 @@
 import Foundation
 
 struct Document {
+    
+    var id: String
     var name: String?
-    var createDate: Date?
-    var pdfUrl: URL?
+    var createDate: String
+    var url: URL
+    
+    init(id: String, createDate: String, url: URL) {
+        self.id = id
+        self.createDate = createDate
+        self.url = url
+    }
+    
 }
