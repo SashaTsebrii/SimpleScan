@@ -90,7 +90,9 @@ class ScanController: UIViewController {
             // Get directory
             let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             let documentURL = documentDirectory.appendingPathComponent(idString)
+            print(documentURL)
             let urlString = documentURL.path
+            print(urlString)
             
             // Save document to directory
             do {
@@ -113,7 +115,7 @@ class ScanController: UIViewController {
             document.setValue("\(idString)", forKeyPath: Constants.kDocument.idString)
             document.setValue("No name", forKey: Constants.kDocument.nameString)
             document.setValue("\(createDateString)", forKey: Constants.kDocument.createDateString)
-            document.setValue("\(urlString)", forKey: Constants.kDocument.urlString)
+            document.setValue("\("file://" + urlString)", forKey: Constants.kDocument.urlString)
             
             // After set all the values, save them inside the CoreData
             do {
