@@ -38,6 +38,8 @@ class ListCell: UICollectionViewCell {
     
     fileprivate var previewImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.masksToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
