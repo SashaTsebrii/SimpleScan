@@ -64,7 +64,7 @@ class ListController: UIViewController {
         super.viewDidLoad()
         
         // Set documents
-        
+        retrieveData()
 //        documents = [Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123")),
 //                     Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123")),
 //                     Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123"))]
@@ -107,97 +107,81 @@ class ListController: UIViewController {
         
         func retrieveData() {
             
-            //As we know that container is set up in the AppDelegates so we need to refer that container.
+            // Get reference to AppDelegate
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
             
-            //We need to create a context from this container
+            // Create a context
             let managedContext = appDelegate.persistentContainer.viewContext
             
-            //Prepare the request of type NSFetchRequest  for the entity
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Document")
+            // Prepare the request of type NSFetchRequest for the entity
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
             
-            fetchRequest.predicate = NSPredicate(format: "nameString = %@", "No name")
+            fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
             fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "createDateString", ascending: false)]
             
             do {
-                let result = try managedContext.fetch(fetchRequest)
-                for data in result as! [NSManagedObject] {
-                    print(data.value(forKey: "idString") as! String)
-                    print(data.value(forKey: "nameString") as! String)
-                    print(data.value(forKey: "createDateString") as! String)
-                    print(data.value(forKey: "urlString") as! String)
-                }
+                documents = try managedContext.fetch(fetchRequest) as! [Document]
             } catch {
                 print("Failed")
             }
             
         }
         
-//        func updateData(){
-//
-//            //As we know that container is set up in the AppDelegates so we need to refer that container.
-//            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-//
-//            //We need to create a context from this container
-//            let managedContext = appDelegate.persistentContainer.viewContext
-//
-//            let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "Document")
-//            fetchRequest.predicate = NSPredicate(format: "username = %@", "Ankur1")
-//            do
-//            {
-//                let test = try managedContext.fetch(fetchRequest)
-//
-//                    let objectUpdate = test[0] as! NSManagedObject
-//                    objectUpdate.setValue("newName", forKey: "username")
-//                    objectUpdate.setValue("newmail", forKey: "email")
-//                    objectUpdate.setValue("newpassword", forKey: "password")
-//                    do{
-//                        try managedContext.save()
-//                    }
-//                    catch
-//                    {
-//                        print(error)
-//                    }
-//                }
-//            catch
-//            {
-//                print(error)
-//            }
-//
-//        }
+    func updateData() {
         
-//         func deleteData(){
+        // Get reference to AppDelegatesrefer
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        // Create a context
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: Constants.kDocument.entityName)
+        fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
+        do {
+            let test = try managedContext.fetch(fetchRequest)
+            
+            let objectUpdate = test[0] as! NSManagedObject
+            objectUpdate.setValue("newName", forKey: "username")
+            objectUpdate.setValue("newmail", forKey: "email")
+            objectUpdate.setValue("newpassword", forKey: "password")
+            do {
+                try managedContext.save()
+            } catch {
+                print(error)
+            }
+        } catch {
+            print(error)
+        }
+        
+    }
+    
+//    func deleteData() {
 //
-//            //As we know that container is set up in the AppDelegates so we need to refer that container.
-//            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//        // Get reference to AppDelegatesrefer
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
 //
-//            //We need to create a context from this container
-//            let managedContext = appDelegate.persistentContainer.viewContext
+//        // Create a context
+//        let managedContext = appDelegate.persistentContainer.viewContext
 //
-//            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Document")
-//            fetchRequest.predicate = NSPredicate(format: "username = %@", "Ankur3")
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
+//        fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
 //
-//            do
-//            {
-//                let test = try managedContext.fetch(fetchRequest)
+//        do {
+//            let test = try managedContext.fetch(fetchRequest)
 //
-//                let objectToDelete = test[0] as! NSManagedObject
-//                managedContext.delete(objectToDelete)
+//            let objectToDelete = test[0] as! NSManagedObject
+//            managedContext.delete(objectToDelete)
 //
-//                do{
-//                    try managedContext.save()
-//                }
-//                catch
-//                {
-//                    print(error)
-//                }
-//
-//            }
-//            catch
-//            {
+//            do {
+//                try managedContext.save()
+//            } catch {
 //                print(error)
 //            }
+//        } catch {
+//            print(error)
 //        }
+//
+//    }
     
 }
 
