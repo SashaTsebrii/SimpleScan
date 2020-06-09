@@ -51,27 +51,29 @@ class PreviewController: UIViewController {
         // Set title
         title = NSLocalizedString("Preview", comment: "")
         
-        if let document = document {
+        if let document = document, let idString = document.idString {
             
-            if let idString = document.value(forKeyPath: "idString") as? String, let urlString = document.value(forKeyPath: "urlString") as? String {
-                            
-                let fileManager = FileManager.default
+            let fileManager = FileManager.default
+            if let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
                 
-                if let url = URL(string: urlString) {
+                let docURL = documentDirectory.appendingPathComponent(idString)
+                if fileManager.fileExists(atPath: docURL.path) {
                     
-                    let fullUrl = url.appendingPathComponent(idString)
-                    if fileManager.fileExists(atPath: fullUrl.path) {
-                        pdfView.document = PDFDocument(url: fullUrl)
+                    if let pdfDocument = PDFDocument(url: docURL) {
+                        pdfView.document = pdfDocument
                     } else {
-                        print("Error load file from URL")
+                        print("Error no document")
                     }
                     
+                } else {
+                    print("Error load file from URL")
                 }
                 
             }
             
+        } else {
+            print("Error no document")
         }
-        
         
     }
     
@@ -79,7 +81,30 @@ class PreviewController: UIViewController {
     
     @objc fileprivate func shareBarButtonTapped(_ sender: UIBarButtonItem) {
         
-        
+        if let document = document, let idString = document.idString {
+            
+            let fileManager = FileManager.default
+            if let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
+                
+                let docURL = documentDirectory.appendingPathComponent(idString)
+                if fileManager.fileExists(atPath: docURL.path) {
+                    
+                    if let pdfData = NSData(contentsOf: docURL) {
+                        let activityController = UIActivityViewController(activityItems: [document.nameString ?? idString, pdfData], applicationActivities: nil)
+                        present(activityController, animated: true, completion: nil)
+                    } else {
+                        print("Error data from URL")
+                    }
+                    
+                } else {
+                    print("Error load file from URL")
+                }
+                
+            }
+            
+        } else {
+            print("Error no document")
+        }
         
     }
     
