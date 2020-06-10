@@ -14,8 +14,8 @@ class SettingsController: UIViewController {
     // MARK: Variables
     
     // MARK: Properties
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
+    fileprivate let scrollView: UIScrollView = {
+        let scrollView = UIScrollView(frame: .zero)
         scrollView.backgroundColor = UIColor.clear
         scrollView.showsVerticalScrollIndicator = true
         scrollView.showsHorizontalScrollIndicator = false
@@ -23,8 +23,8 @@ class SettingsController: UIViewController {
         return scrollView
     }()
     
-    private let contentView: UIView = {
-        let view = UIView()
+    fileprivate let contentView: UIView = {
+        let view = UIView(frame: .zero)
         view.backgroundColor = UIColor.clear
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -38,6 +38,18 @@ class SettingsController: UIViewController {
         button.addTarget(self, action: #selector(emailButtonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    fileprivate let appVersionLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            label.text = NSLocalizedString("App version: \(String(describing: appVersion))", comment: "")
+        }
+        label.textAlignment = .left
+        label.textColor = .gray
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     // MARK: Lifecycle
@@ -77,6 +89,14 @@ class SettingsController: UIViewController {
             emailButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             emailButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             emailButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+        ])
+        
+        contentView.addSubview(appVersionLabel)
+        NSLayoutConstraint.activate([
+            appVersionLabel.heightAnchor.constraint(equalToConstant: 16),
+            appVersionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            appVersionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            appVersionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
         ])
         
     }
@@ -120,18 +140,32 @@ class SettingsController: UIViewController {
             
             print("Error mail")
             
-            let alert = UIAlertController(title: "No scan", message: "You must scan before making a PDF.", preferredStyle: .alert)
+            let alertController = UIAlertController(title: "Email error", message: "Please make sure you add the email address in the settings.", preferredStyle: .alert)
+            
             let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
                 
             })
-            alert.addAction(okAction)
-            self.present(alert, animated: true, completion: nil)
+            alertController.addAction(okAction)
+            
+            let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
+
+                guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                    return
+                }
+
+                if UIApplication.shared.canOpenURL(settingsUrl) {
+                    UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                        print("Settings opened: \(success)")
+                    })
+                }
+            }
+            alertController.addAction(settingsAction)
+            
+            self.present(alertController, animated: true, completion: nil)
             
         }
         
     }
-    
-    
     
 }
 
