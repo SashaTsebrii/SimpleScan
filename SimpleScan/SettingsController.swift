@@ -13,49 +13,29 @@ class SettingsController: UIViewController {
     
     // MARK: Variables
     
-    var contentSize = CGSize.zero {
-        didSet {
-            
-            var topSpace: CGFloat = 0
-            
-            if #available(iOS 11.0, *) {
-                topSpace = self.view.safeAreaInsets.top
-            } else {
-                topSpace = self.topLayoutGuide.length
-            }
-            
-            let size = CGSize(width: view.frame.width, height: view.frame.height - topSpace)
-            
-            contentSize = size
-            
-        }
-    }
-    
     // MARK: Properties
-    
-    lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView(frame: view.bounds)
-        scrollView.backgroundColor = .white
-        scrollView.contentSize = contentSize
-        scrollView.autoresizingMask = .flexibleHeight
-        scrollView.showsHorizontalScrollIndicator = true
-        scrollView.bounces = true
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = UIColor.clear
+        scrollView.showsVerticalScrollIndicator = true
+        scrollView.showsHorizontalScrollIndicator = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
     
-    lazy var contentView: UIView = {
-        let view = UIView(frame: .zero)
-        view.frame.size = contentSize
-        view.backgroundColor = .white
+    private let contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.clear
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    let emailButton: UIButton = {
+    fileprivate let emailButton: UIButton = {
         let button = UIButton(frame: .zero)
         button.setTitle(NSLocalizedString("Report a problem", comment: ""), for: .normal)
         button.setTitleColor(.black, for: .normal)
+        button.contentHorizontalAlignment = .left
+        button.addTarget(self, action: #selector(emailButtonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -71,16 +51,26 @@ class SettingsController: UIViewController {
         // Set background color
         view.backgroundColor = .white
         
-        // Set scrollView
+        // Scroll view
         view.addSubview(scrollView)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
         
+        // Content view
         scrollView.addSubview(contentView)
+        NSLayoutConstraint.activate([
+            contentView.heightAnchor.constraint(equalToConstant: 1000),
+            contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
+        ])
+        
         contentView.addSubview(emailButton)
         NSLayoutConstraint.activate([
             emailButton.heightAnchor.constraint(equalToConstant: 44),
@@ -90,13 +80,67 @@ class SettingsController: UIViewController {
         ])
         
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-       // Set title
-       title = NSLocalizedString("Settings", comment: "")
         
+    }
+    
+    // MARK: Actions
+    
+    @objc fileprivate func emailButtonTapped(_ sender: UIButton) {
+        
+        sendEmail()
+        
+    }
+    
+    // MARK: Helper
+    
+    fileprivate func sendEmail() {
+        
+        if MFMailComposeViewController.canSendMail() {
+            
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["sashatsebrii@gmail.com"])
+            
+            let deviceType = UIDevice().type
+            print(deviceType)
+            
+            let systemVersion = UIDevice.current.systemVersion
+            print(systemVersion)
+            
+            let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+            
+            mail.setMessageBody("<p>Device type: \(deviceType) \nSystem version: \(systemVersion) \nAppVersion: \(String(describing: appVersion))</p>", isHTML: true)
+            
+            present(mail, animated: true)
+            
+        } else {
+            
+            print("Error mail")
+            
+            let alert = UIAlertController(title: "No scan", message: "You must scan before making a PDF.", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                
+            })
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+            
+        }
+        
+    }
+    
+    
+    
+}
+
+extension SettingsController: MFMailComposeViewControllerDelegate {
+    
+    // MARK: MFMailComposeViewControllerDelegate
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
     }
     
 }
