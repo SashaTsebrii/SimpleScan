@@ -75,7 +75,6 @@ class SettingsController: UIViewController {
         // Content view
         scrollView.addSubview(contentView)
         NSLayoutConstraint.activate([
-            contentView.heightAnchor.constraint(equalToConstant: 1000),
             contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
@@ -103,6 +102,26 @@ class SettingsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        var navigationBarHeight: CGFloat = 0
+        if #available(iOS 11.0, *) {
+            navigationBarHeight = self.view.safeAreaInsets.top
+        } else {
+            navigationBarHeight = self.topLayoutGuide.length
+        }
+        
+        let statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+
+        let contentHeight = view.bounds.height - navigationBarHeight - statusBarHeight
+                
+        NSLayoutConstraint.activate([
+            contentView.heightAnchor.constraint(equalToConstant: contentHeight)
+        ])
         
     }
     
@@ -148,16 +167,17 @@ class SettingsController: UIViewController {
             alertController.addAction(okAction)
             
             let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
-
+                
                 guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
                     return
                 }
-
+                
                 if UIApplication.shared.canOpenURL(settingsUrl) {
                     UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
                         print("Settings opened: \(success)")
                     })
                 }
+                
             }
             alertController.addAction(settingsAction)
             
