@@ -139,19 +139,21 @@ class SettingsController: UIViewController {
         
         if MFMailComposeViewController.canSendMail() {
             
+            // Get device type
+            let deviceType = UIDevice().type
+            
+            // Get syste version
+            let systemVersion = UIDevice.current.systemVersion
+            
+            // Get app version
+            let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+            
+            // Create and set MFMailComposeViewController
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
             mail.setToRecipients(["sashatsebrii@gmail.com"])
-            
-            let deviceType = UIDevice().type
-            print(deviceType)
-            
-            let systemVersion = UIDevice.current.systemVersion
-            print(systemVersion)
-            
-            let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-            
-            mail.setMessageBody("<p>Device type: \(deviceType) \nSystem version: \(systemVersion) \nAppVersion: \(String(describing: appVersion))</p>", isHTML: true)
+            mail.setMessageBody("<p>Device type: \(deviceType)</p><p>System version: \(systemVersion)</p><p>AppVersion: \(appVersion ?? "")</p>", isHTML: true)
+            mail.setSubject("SimpleScan - Report a problem")
             
             present(mail, animated: true)
             
