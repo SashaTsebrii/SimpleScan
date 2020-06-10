@@ -82,26 +82,37 @@ class PreviewController: UIViewController {
     @objc fileprivate func shareBarButtonTapped(_ sender: UIBarButtonItem) {
         
         if let document = document, let idString = document.idString {
-            
+
             let fileManager = FileManager.default
             if let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
-                
+
                 let docURL = documentDirectory.appendingPathComponent(idString)
                 if fileManager.fileExists(atPath: docURL.path) {
-                    
+
                     if let pdfData = NSData(contentsOf: docURL) {
-                        let activityController = UIActivityViewController(activityItems: [document.nameString ?? idString, pdfData], applicationActivities: nil)
-                        present(activityController, animated: true, completion: nil)
+                        
+                        // Set up activity view controller
+                        let activityViewController = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
+                        
+                        // So that iPads won't crash
+                        activityViewController.popoverPresentationController?.sourceView = self.view
+
+                        // Exclude some activity types from the list (optional)
+                        activityViewController.excludedActivityTypes = []
+
+                        // Present the view controller
+                        self.present(activityViewController, animated: true, completion: nil)
+                        
                     } else {
                         print("Error data from URL")
                     }
-                    
+
                 } else {
                     print("Error load file from URL")
                 }
-                
+
             }
-            
+
         } else {
             print("Error no document")
         }
