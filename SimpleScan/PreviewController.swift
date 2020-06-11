@@ -19,6 +19,11 @@ class PreviewController: UIViewController {
     
     var pdfView: PDFView = {
         let pdfView = PDFView()
+        pdfView.backgroundColor = .white
+        pdfView.autoScales = true
+        pdfView.displayDirection = .vertical
+        pdfView.pageShadowsEnabled = false
+        pdfView.pageBreakMargins = UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)
         pdfView.translatesAutoresizingMaskIntoConstraints = false
         return pdfView
     }()
@@ -61,6 +66,12 @@ class PreviewController: UIViewController {
                     
                     if let pdfDocument = PDFDocument(url: docURL) {
                         pdfView.document = pdfDocument
+                        if let firstPage = pdfDocument.page(at: 0) {
+                            let firstPageBounds = firstPage.bounds(for: pdfView.displayBox)
+                            DispatchQueue.main.async {
+                                self.pdfView.go(to: CGRect(x: 0, y: firstPageBounds.height, width: 0, height: 0), on: firstPage)
+                            }
+                        }
                     } else {
                         print("Error no document")
                     }
