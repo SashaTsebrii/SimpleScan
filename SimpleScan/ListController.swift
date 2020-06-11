@@ -62,14 +62,16 @@ class ListController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         // Set documents
         retrieveData()
-//        documents = [Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123")),
-//                     Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123")),
-//                     Document(id: "123", createDate: "123", url: URL(fileURLWithPath: "123"))]
         collectionView.reloadData()
-    
+        
     }
     
     // MARK: Actions
@@ -102,8 +104,6 @@ class ListController: UIViewController {
     }
     
     // MARK: CoreData
-    
-    
         
         func retrieveData() {
             
@@ -154,34 +154,6 @@ class ListController: UIViewController {
         }
         
     }
-    
-//    func deleteData() {
-//
-//        // Get reference to AppDelegatesrefer
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-//
-//        // Create a context
-//        let managedContext = appDelegate.persistentContainer.viewContext
-//
-//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
-//        fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
-//
-//        do {
-//            let test = try managedContext.fetch(fetchRequest)
-//
-//            let objectToDelete = test[0] as! NSManagedObject
-//            managedContext.delete(objectToDelete)
-//
-//            do {
-//                try managedContext.save()
-//            } catch {
-//                print(error)
-//            }
-//        } catch {
-//            print(error)
-//        }
-//
-//    }
     
 }
 
