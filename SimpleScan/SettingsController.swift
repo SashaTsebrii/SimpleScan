@@ -186,7 +186,7 @@ class SettingsController: UIViewController {
         
         let deleteAction = UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive) { (_) in
             
-            self.deleteData()
+            self.deleteAllData()
             
         }
         alertController.addAction(deleteAction)
@@ -256,27 +256,24 @@ class SettingsController: UIViewController {
         
     }
     
-    func deleteData() {
+    func deleteAllData() {
         
         // Get reference to AppDelegatesrefer
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
+
         // Create a context
         let managedContext = appDelegate.persistentContainer.viewContext
-        
+
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
         fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
-        
+
         do {
-            let test = try managedContext.fetch(fetchRequest)
-            
-            let objectToDelete = test[0] as! NSManagedObject
-            managedContext.delete(objectToDelete)
-            
-            do {
-                try managedContext.save()
-            } catch {
-                print(error)
+            let documents = try managedContext.fetch(fetchRequest)
+            for document in documents {
+                guard let document = document as? Document else {
+                    continue
+                }
+                managedContext.delete(document)
             }
         } catch {
             print(error)

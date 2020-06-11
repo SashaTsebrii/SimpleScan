@@ -137,6 +137,7 @@ class ListController: UIViewController {
         
         let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: Constants.kDocument.entityName)
         fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
+        fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "createDateString", ascending: false)]
         do {
             let test = try managedContext.fetch(fetchRequest)
             
@@ -144,6 +145,35 @@ class ListController: UIViewController {
             objectUpdate.setValue("newName", forKey: "username")
             objectUpdate.setValue("newmail", forKey: "email")
             objectUpdate.setValue("newpassword", forKey: "password")
+            do {
+                try managedContext.save()
+            } catch {
+                print(error)
+            }
+        } catch {
+            print(error)
+        }
+        
+    }
+    
+    func deleteData(atIndex index: Int) {
+        
+        // Get reference to AppDelegatesrefer
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        // Create a context
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
+        fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
+        fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "createDateString", ascending: false)]
+        
+        do {
+            let documents = try managedContext.fetch(fetchRequest)
+            
+            let objectToDelete = documents[index] as! Document
+            managedContext.delete(objectToDelete)
+            
             do {
                 try managedContext.save()
             } catch {
