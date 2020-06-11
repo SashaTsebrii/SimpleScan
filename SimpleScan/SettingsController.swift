@@ -41,6 +41,16 @@ class SettingsController: UIViewController {
         return button
     }()
     
+    fileprivate let rateButton: UIButton = {
+        let button = UIButton(frame: .zero)
+        button.setTitle(NSLocalizedString("Rate the app", comment: ""), for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.contentHorizontalAlignment = .left
+        button.addTarget(self, action: #selector(rateButtonTapped(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     fileprivate let deleteButton: UIButton = {
         let button = UIButton(frame: .zero)
         button.setTitle(NSLocalizedString("Delete all scans", comment: ""), for: .normal)
@@ -101,10 +111,18 @@ class SettingsController: UIViewController {
             emailButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
         
+        contentView.addSubview(rateButton)
+        NSLayoutConstraint.activate([
+            rateButton.heightAnchor.constraint(equalToConstant: 44),
+            rateButton.topAnchor.constraint(equalTo: emailButton.bottomAnchor, constant: 16),
+            rateButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            rateButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+        ])
+        
         contentView.addSubview(deleteButton)
         NSLayoutConstraint.activate([
             deleteButton.heightAnchor.constraint(equalToConstant: 44),
-            deleteButton.topAnchor.constraint(equalTo: emailButton.bottomAnchor, constant: 16),
+            deleteButton.topAnchor.constraint(equalTo: rateButton.bottomAnchor, constant: 16),
             deleteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
@@ -149,6 +167,16 @@ class SettingsController: UIViewController {
     @objc fileprivate func emailButtonTapped(_ sender: UIButton) {
         
         sendEmail()
+        
+    }
+    
+    @objc fileprivate func rateButtonTapped(_ sender: UIButton) {
+        
+        let appleID = "1154366081"
+        let url = "https://itunes.apple.com/app/id\(appleID)?action=write-review"
+        if let path = URL(string: url) {
+                UIApplication.shared.open(path, options: [:], completionHandler: nil)
+        }
         
     }
     
