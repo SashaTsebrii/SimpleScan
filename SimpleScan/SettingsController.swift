@@ -8,6 +8,7 @@
 
 import UIKit
 import MessageUI
+import CoreData
 
 class SettingsController: UIViewController {
     
@@ -36,6 +37,16 @@ class SettingsController: UIViewController {
         button.setTitleColor(.black, for: .normal)
         button.contentHorizontalAlignment = .left
         button.addTarget(self, action: #selector(emailButtonTapped(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    fileprivate let deleteButton: UIButton = {
+        let button = UIButton(frame: .zero)
+        button.setTitle(NSLocalizedString("Delete all scans", comment: ""), for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        button.contentHorizontalAlignment = .left
+        button.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -90,6 +101,14 @@ class SettingsController: UIViewController {
             emailButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
         
+        contentView.addSubview(deleteButton)
+        NSLayoutConstraint.activate([
+            deleteButton.heightAnchor.constraint(equalToConstant: 44),
+            deleteButton.topAnchor.constraint(equalTo: emailButton.bottomAnchor, constant: 16),
+            deleteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+        ])
+        
         contentView.addSubview(appVersionLabel)
         NSLayoutConstraint.activate([
             appVersionLabel.heightAnchor.constraint(equalToConstant: 16),
@@ -133,6 +152,26 @@ class SettingsController: UIViewController {
         
     }
     
+    @objc fileprivate func deleteButtonTapped(_ sender: UIButton) {
+        
+        let alertController = UIAlertController(title: NSLocalizedString("Are you sure?", comment: ""), message: NSLocalizedString("All pdf documents that are in this application will be deleted. Delete all pdf documents?", comment: ""), preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive) { (_) in
+            
+            self.deleteData()
+            
+        }
+        alertController.addAction(deleteAction)
+        
+        let settingsAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default) { (_) in
+            
+        }
+        alertController.addAction(settingsAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+        
+    }
+    
     // MARK: Helper
     
     fileprivate func sendEmail() {
@@ -161,14 +200,14 @@ class SettingsController: UIViewController {
             
             print("Error mail")
             
-            let alertController = UIAlertController(title: "Email error", message: "Please make sure you add the email address in the settings.", preferredStyle: .alert)
+            let alertController = UIAlertController(title: NSLocalizedString("Email error", comment: ""), message: NSLocalizedString("Please make sure you add the email address in the settings.", comment: ""), preferredStyle: .alert)
             
-            let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+            let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { (_) in
                 
-            })
+            }
             alertController.addAction(okAction)
             
-            let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
+            let settingsAction = UIAlertAction(title: NSLocalizedString("Settings", comment: ""), style: .default) { (_) in
                 
                 guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
                     return
@@ -185,6 +224,34 @@ class SettingsController: UIViewController {
             
             self.present(alertController, animated: true, completion: nil)
             
+        }
+        
+    }
+    
+    func deleteData() {
+        
+        // Get reference to AppDelegatesrefer
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        // Create a context
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
+        fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
+        
+        do {
+            let test = try managedContext.fetch(fetchRequest)
+            
+            let objectToDelete = test[0] as! NSManagedObject
+            managedContext.delete(objectToDelete)
+            
+            do {
+                try managedContext.save()
+            } catch {
+                print(error)
+            }
+        } catch {
+            print(error)
         }
         
     }

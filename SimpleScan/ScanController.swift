@@ -113,7 +113,7 @@ class ScanController: UIViewController {
             // Final add some data to newly created entity for each keys
             let document = NSManagedObject(entity: documentEntity, insertInto: managedContext)
             document.setValue("\(idString)", forKeyPath: Constants.kDocument.idString)
-            document.setValue("No name", forKey: Constants.kDocument.nameString)
+            document.setValue(NSLocalizedString("No name", comment: ""), forKey: Constants.kDocument.nameString)
             document.setValue("\(createDateString)", forKey: Constants.kDocument.createDateString)
             document.setValue("\("file://" + urlString)", forKey: Constants.kDocument.urlString)
             

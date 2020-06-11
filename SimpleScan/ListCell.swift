@@ -67,7 +67,7 @@ class ListCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .lightGray
+        contentView.backgroundColor = .white
         
         contentView.addSubview(createDateLabel)
         NSLayoutConstraint.activate([
