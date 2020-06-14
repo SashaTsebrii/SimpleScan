@@ -36,7 +36,7 @@ class ListCell: UICollectionViewCell {
     
     // MARK: Properties
     
-    fileprivate var previewImageView: UIImageView = {
+    var previewImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true

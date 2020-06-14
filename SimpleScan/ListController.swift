@@ -103,6 +103,30 @@ class ListController: UIViewController {
         
     }
     
+    func makeContextMenu(for document: Document) -> UIMenu {
+        
+        let rename = UIAction(title: "Rename Pupper", image: UIImage(systemName: "square.and.pencil")) { action in
+            // Show rename UI
+        }
+
+        // Here we specify the "destructive" attribute to show that it’s destructive in nature
+        let delete = UIAction(title: "Delete Photo", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
+            // Delete this photo 😢
+        }
+
+        // The "title" will show up as an action for opening this menu
+        let edit = UIMenu(title: "Edit...", children: [rename, delete])
+
+        // Create a UIAction for sharing
+        let share = UIAction(title: "Share Pupper", image: UIImage(systemName: "square.and.arrow.up")) { action in
+            // Show system share sheet
+        }
+
+        // Create and return a UIMenu with a actions
+        return UIMenu(title: document.nameString!, children: [edit, share])
+        
+    }
+    
     // MARK: CoreData
         
         func retrieveData() {
@@ -218,6 +242,21 @@ extension ListController: UICollectionViewDataSource, UICollectionViewDelegate, 
         
         let previewController = craatePreviewController(for: indexPath.item)
         navigationController?.pushViewController(previewController, animated: true)
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let cell = collectionView.cellForItem(at: indexPath) as! ListCell
+        let image = cell.previewImageView.image
+        
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+            // Create a preview view controller and return it
+            return CellPreviewController(image: image!)
+        }, actionProvider: { suggestedActions in
+            // "documents" is the array backing the collection view
+            return self.makeContextMenu(for: self.documents[indexPath.row])
+        })
         
     }
     
