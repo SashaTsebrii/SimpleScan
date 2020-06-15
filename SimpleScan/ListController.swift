@@ -134,8 +134,25 @@ class ListController: UIViewController {
         }
 
         // Here we specify the "destructive" attribute to show that it’s destructive in nature
-        let delete = UIAction(title: "Delete Photo", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
+        let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
+            
             // Delete this photo 😢
+            let alertController = UIAlertController(title: NSLocalizedString("Are you sure?", comment: ""), message: NSLocalizedString("Selected pdf documents will be deleted. Delete pdf documents?", comment: ""), preferredStyle: .alert)
+            
+            let deleteAction = UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive) { (_) in
+                
+                // FIXME: Call deleteData by indexPath from here!
+                
+            }
+            alertController.addAction(deleteAction)
+            
+            let settingsAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default) { (_) in
+                
+            }
+            alertController.addAction(settingsAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+            
         }
 
         // The "title" will show up as an action for opening this menu
