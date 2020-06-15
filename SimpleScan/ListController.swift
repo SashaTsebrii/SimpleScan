@@ -103,7 +103,7 @@ class ListController: UIViewController {
         
     }
     
-    func makeContextMenu(for document: Document) -> UIMenu {
+    func makeContextMenu(for document: Document, at indexPath: IndexPath) -> UIMenu {
         
         let rename = UIAction(title: "Rename", image: UIImage(systemName: "square.and.pencil")) { action in
             
@@ -121,7 +121,8 @@ class ListController: UIViewController {
                 guard let alertController = alertController, let textField = alertController.textFields?.first else { return }
                 print("New name \(String(describing: textField.text))")
                 
-                // FIXME: Call updateData by indexPath from here!
+                self.updateData(by: indexPath, with: textField.text!)
+                self.collectionView.reloadData()
                 
             }
             alertController.addAction(confirmAction)
@@ -141,7 +142,9 @@ class ListController: UIViewController {
             
             let deleteAction = UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive) { (_) in
                 
-                // FIXME: Call deleteData by indexPath from here!
+                self.deleteData(atIndex: indexPath.row)
+                self.retrieveData()
+                self.collectionView.reloadData()
                 
             }
             alertController.addAction(deleteAction)
@@ -294,7 +297,7 @@ extension ListController: UICollectionViewDataSource, UICollectionViewDelegate, 
             return CellPreviewController(image: image!)
         }, actionProvider: { suggestedActions in
             // "documents" is the array backing the collection view
-            return self.makeContextMenu(for: self.documents[indexPath.row])
+            return self.makeContextMenu(for: self.documents[indexPath.row], at: indexPath)
         })
         
     }
