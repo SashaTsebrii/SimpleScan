@@ -105,8 +105,32 @@ class ListController: UIViewController {
     
     func makeContextMenu(for document: Document) -> UIMenu {
         
-        let rename = UIAction(title: "Rename Pupper", image: UIImage(systemName: "square.and.pencil")) { action in
+        let rename = UIAction(title: "Rename", image: UIImage(systemName: "square.and.pencil")) { action in
+            
             // Show rename UI
+            let alertController = UIAlertController(title: "", message: "", preferredStyle: .alert)
+            alertController.addTextField { textField in textField.placeholder = "New name"
+                
+                textField.autocapitalizationType = .sentences
+                textField.keyboardType = .default
+                
+            }
+            
+            let confirmAction = UIAlertAction(title: "OK", style: .default) { [weak alertController] _ in
+                
+                guard let alertController = alertController, let textField = alertController.textFields?.first else { return }
+                print("New name \(String(describing: textField.text))")
+                
+                // FIXME: Call updateData by indexPath from here!
+                
+            }
+            alertController.addAction(confirmAction)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+            
         }
 
         // Here we specify the "destructive" attribute to show that it’s destructive in nature
@@ -118,7 +142,7 @@ class ListController: UIViewController {
         let edit = UIMenu(title: "Edit...", children: [rename, delete])
 
         // Create a UIAction for sharing
-        let share = UIAction(title: "Share Pupper", image: UIImage(systemName: "square.and.arrow.up")) { action in
+        let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up")) { action in
             // Show system share sheet
         }
 
@@ -151,7 +175,7 @@ class ListController: UIViewController {
             
         }
         
-    func updateData() {
+    func updateData(by index: IndexPath, with name: String) {
         
         // Get reference to AppDelegatesrefer
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -165,10 +189,8 @@ class ListController: UIViewController {
         do {
             let test = try managedContext.fetch(fetchRequest)
             
-            let objectUpdate = test[0] as! NSManagedObject
-            objectUpdate.setValue("newName", forKey: "username")
-            objectUpdate.setValue("newmail", forKey: "email")
-            objectUpdate.setValue("newpassword", forKey: "password")
+            let objectUpdate = test[index.row] as! Document
+            objectUpdate.setValue(name, forKey: Constants.kDocument.nameString)
             do {
                 try managedContext.save()
             } catch {
