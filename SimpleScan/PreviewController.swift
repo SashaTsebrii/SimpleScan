@@ -45,7 +45,7 @@ class PreviewController: UIViewController {
         ])
         
         // Create right bar button item
-        let shareBarButton = UIBarButtonItem(title: NSLocalizedString("Share", comment: ""), style: .plain, target: self, action: #selector(shareBarButtonTapped(_:)))
+        let shareBarButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonTapped(_:)))
         navigationItem.rightBarButtonItem = shareBarButton
         
     }

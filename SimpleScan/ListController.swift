@@ -36,7 +36,7 @@ class ListController: UIViewController {
         super.loadView()
         
         // Set title
-        title = NSLocalizedString("List", comment: "")
+        title = NSLocalizedString("Documents", comment: "")
         
         // Set background color
         view.backgroundColor = .white
@@ -51,11 +51,15 @@ class ListController: UIViewController {
         ])
         
         // Create left bar button item
-        let settingsBarButton = UIBarButtonItem(title: NSLocalizedString("Settings", comment: ""), style: .plain, target: self, action: #selector(settingsBarButtonTapped(_:)))
+        let button = UIButton(frame: .zero)
+        button.tintColor = .white
+        button.setImage(UIImage(named: "settings"), for: .normal)
+        button.addTarget(self, action: #selector(settingsBarButtonTapped(_:)), for: .touchUpInside)
+        let settingsBarButton = UIBarButtonItem(customView: button)
         navigationItem.leftBarButtonItem = settingsBarButton
         
         // Create right bar button item
-        let scanBarButton = UIBarButtonItem(title: NSLocalizedString("Scan", comment: ""), style: .plain, target: self, action: #selector(scanBarButtonTapped(_:)))
+        let scanBarButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(scanBarButtonTapped(_:)))
         navigationItem.rightBarButtonItem = scanBarButton
         
     }
@@ -76,7 +80,7 @@ class ListController: UIViewController {
     
     // MARK: Actions
     
-    @objc fileprivate func settingsBarButtonTapped(_ sendr: UIBarButtonItem) {
+    @objc fileprivate func settingsBarButtonTapped(_ sendr: UIButton) {
         
         let settingsController = SettingsController()
         navigationController?.pushViewController(settingsController, animated: true)
