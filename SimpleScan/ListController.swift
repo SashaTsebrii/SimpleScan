@@ -121,7 +121,7 @@ class ListController: UIViewController {
                 guard let alertController = alertController, let textField = alertController.textFields?.first else { return }
                 print("New name \(String(describing: textField.text))")
                 
-                self.updateData(by: indexPath, with: textField.text!)
+                self.updateData(byIndex: indexPath.row, with: textField.text!)
                 self.collectionView.reloadData()
                 
             }
@@ -137,7 +137,7 @@ class ListController: UIViewController {
         // Here we specify the "destructive" attribute to show that it’s destructive in nature
         let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
             
-            // Delete this photo 😢
+            // Delete this photo
             let alertController = UIAlertController(title: NSLocalizedString("Are you sure?", comment: ""), message: NSLocalizedString("Selected pdf documents will be deleted. Delete pdf documents?", comment: ""), preferredStyle: .alert)
             
             let deleteAction = UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive) { (_) in
@@ -184,8 +184,10 @@ class ListController: UIViewController {
             // Prepare the request of type NSFetchRequest for the entity
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
             
-            fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
-            fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "createDateString", ascending: false)]
+            // Get data from CoreData only with nameString equal "No name"
+            // fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
+            // Get data sorting by "createDateString"
+            fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: Constants.kDocument.createDateString, ascending: false)]
             
             do {
                 documents = try managedContext.fetch(fetchRequest) as! [Document]
@@ -195,7 +197,7 @@ class ListController: UIViewController {
             
         }
         
-    func updateData(by index: IndexPath, with name: String) {
+    func updateData(byIndex index: Int, with name: String) {
         
         // Get reference to AppDelegatesrefer
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -203,13 +205,13 @@ class ListController: UIViewController {
         // Create a context
         let managedContext = appDelegate.persistentContainer.viewContext
         
-        let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: Constants.kDocument.entityName)
-        fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
-        fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "createDateString", ascending: false)]
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: Constants.kDocument.entityName)
+        fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: Constants.kDocument.createDateString, ascending: false)]
+        
         do {
-            let test = try managedContext.fetch(fetchRequest)
+            let documents = try managedContext.fetch(fetchRequest)
             
-            let objectUpdate = test[index.row] as! Document
+            let objectUpdate = documents[index] as! Document
             objectUpdate.setValue(name, forKey: Constants.kDocument.nameString)
             do {
                 try managedContext.save()
@@ -231,8 +233,7 @@ class ListController: UIViewController {
         let managedContext = appDelegate.persistentContainer.viewContext
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
-        fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
-        fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "createDateString", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: Constants.kDocument.createDateString, ascending: false)]
         
         do {
             let documents = try managedContext.fetch(fetchRequest)

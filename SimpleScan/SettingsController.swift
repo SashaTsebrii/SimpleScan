@@ -265,7 +265,6 @@ class SettingsController: UIViewController {
         let managedContext = appDelegate.persistentContainer.viewContext
 
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
-        fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
 
         do {
             let documents = try managedContext.fetch(fetchRequest)
