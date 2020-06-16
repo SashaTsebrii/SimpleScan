@@ -137,7 +137,7 @@ class ListController: UIViewController {
         // Here we specify the "destructive" attribute to show that it’s destructive in nature
         let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
             
-            // Delete this photo
+            // Delete this document
             let alertController = UIAlertController(title: NSLocalizedString("Are you sure?", comment: ""), message: NSLocalizedString("Selected pdf documents will be deleted. Delete pdf documents?", comment: ""), preferredStyle: .alert)
             
             let deleteAction = UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive) { (_) in
@@ -164,6 +164,43 @@ class ListController: UIViewController {
         // Create a UIAction for sharing
         let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up")) { action in
             // Show system share sheet
+            
+            if let idString = document.idString {
+
+                let fileManager = FileManager.default
+                if let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
+
+                    let docURL = documentDirectory.appendingPathComponent(idString)
+                    if fileManager.fileExists(atPath: docURL.path) {
+
+                        if let pdfData = NSData(contentsOf: docURL) {
+                            
+                            // Set up activity view controller
+                            let activityViewController = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
+                            
+                            // So that iPads won't crash
+                            activityViewController.popoverPresentationController?.sourceView = self.view
+
+                            // Exclude some activity types from the list (optional)
+                            activityViewController.excludedActivityTypes = []
+
+                            // Present the view controller
+                            self.present(activityViewController, animated: true, completion: nil)
+                            
+                        } else {
+                            print("Error data from URL")
+                        }
+
+                    } else {
+                        print("Error load file from URL")
+                    }
+
+                }
+
+            } else {
+                print("Error no document")
+            }
+            
         }
 
         // Create and return a UIMenu with a actions
