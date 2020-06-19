@@ -18,6 +18,11 @@ class ScanController: UIViewController {
     
     var pdfView: PDFView = {
         let pdfView = PDFView()
+        pdfView.backgroundColor = .white
+        pdfView.autoScales = true
+        pdfView.displayDirection = .vertical
+        pdfView.pageShadowsEnabled = false
+        pdfView.pageBreakMargins = UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)
         pdfView.translatesAutoresizingMaskIntoConstraints = false
         return pdfView
     }()
