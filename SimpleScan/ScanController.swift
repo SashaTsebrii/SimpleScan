@@ -145,6 +145,9 @@ class ScanController: UIViewController {
     
     fileprivate func scan() {
         
+        UINavigationBar.appearance().tintColor = .black
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.black]
+        
         let scannerViewController = VNDocumentCameraViewController()
         scannerViewController.delegate = self
         present(scannerViewController, animated: false)
@@ -158,6 +161,10 @@ extension ScanController: VNDocumentCameraViewControllerDelegate {
     // MARK: VNDocumentCameraViewControllerDelegate
     
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
+        
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
+        
         guard scan.pageCount >= 1 else {
             controller.dismiss(animated: true)
             return
@@ -199,6 +206,9 @@ extension ScanController: VNDocumentCameraViewControllerDelegate {
     func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
         
         controller.dismiss(animated: true)
+        
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
         
         navigationController?.popToRootViewController(animated: false)
         
