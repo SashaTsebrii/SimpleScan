@@ -33,10 +33,12 @@ class SettingsController: UIViewController {
     
     fileprivate let emailButton: UIButton = {
         let button = UIButton(frame: .zero)
+        button.setImage(UIImage(named: "mail"), for: .normal)
         button.setTitle(NSLocalizedString("Report a problem", comment: ""), for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.contentHorizontalAlignment = .left
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 0)
         button.backgroundColor = .white
         button.addTarget(self, action: #selector(emailButtonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -45,10 +47,12 @@ class SettingsController: UIViewController {
     
     fileprivate let rateButton: UIButton = {
         let button = UIButton(frame: .zero)
+        button.setImage(UIImage(named: "star"), for: .normal)
         button.setTitle(NSLocalizedString("Rate the app", comment: ""), for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.contentHorizontalAlignment = .left
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 0)
         button.backgroundColor = .white
         button.addTarget(self, action: #selector(rateButtonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -57,10 +61,12 @@ class SettingsController: UIViewController {
     
     fileprivate let deleteButton: UIButton = {
         let button = UIButton(frame: .zero)
+        button.setImage(UIImage(named: "delete"), for: .normal)
         button.setTitle(NSLocalizedString("Delete all scans", comment: ""), for: .normal)
         button.setTitleColor(.red, for: .normal)
         button.contentHorizontalAlignment = .left
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 0)
         button.backgroundColor = .white
         button.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
