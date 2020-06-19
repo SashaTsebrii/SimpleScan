@@ -107,6 +107,7 @@ class ListController: UIViewController {
         
     }
     
+    // Set up ContextMenu
     func makeContextMenu(for document: Document, at indexPath: IndexPath) -> UIMenu {
         
         let rename = UIAction(title: "Rename", image: UIImage(systemName: "square.and.pencil")) { action in
@@ -208,7 +209,10 @@ class ListController: UIViewController {
         }
 
         // Create and return a UIMenu with a actions
-        return UIMenu(title: document.nameString!, children: [edit, share])
+        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let documentURL = documentDirectory.appendingPathComponent(document.idString!)
+        let title = "\(document.nameString!)\n\(document.createDateString!)\n\(documentURL.fileSizeString)"
+        return UIMenu(title: title, children: [edit, share])
         
     }
     

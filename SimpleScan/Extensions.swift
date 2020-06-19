@@ -261,6 +261,7 @@ public extension UIDevice {
 // MARK: -
 
 extension URL {
+    
     var attributes: [FileAttributeKey : Any]? {
         do {
             return try FileManager.default.attributesOfItem(atPath: path)
@@ -281,4 +282,5 @@ extension URL {
     var creationDate: Date? {
         return attributes?[.creationDate] as? Date
     }
+    
 }

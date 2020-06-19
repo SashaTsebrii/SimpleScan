@@ -126,7 +126,7 @@ class ScanController: UIViewController {
             document.setValue("\(idString)", forKeyPath: Constants.kDocument.idString)
             document.setValue(NSLocalizedString("No name", comment: ""), forKey: Constants.kDocument.nameString)
             document.setValue("\(createDateString)", forKey: Constants.kDocument.createDateString)
-            document.setValue("\("file://" + urlString)", forKey: Constants.kDocument.urlString)
+            document.setValue("\(urlString)", forKey: Constants.kDocument.urlString)
             
             // After set all the values, save them inside the CoreData
             do {
