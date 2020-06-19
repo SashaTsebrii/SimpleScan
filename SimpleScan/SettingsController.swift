@@ -36,6 +36,8 @@ class SettingsController: UIViewController {
         button.setTitle(NSLocalizedString("Report a problem", comment: ""), for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.contentHorizontalAlignment = .left
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.backgroundColor = .white
         button.addTarget(self, action: #selector(emailButtonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -46,6 +48,8 @@ class SettingsController: UIViewController {
         button.setTitle(NSLocalizedString("Rate the app", comment: ""), for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.contentHorizontalAlignment = .left
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.backgroundColor = .white
         button.addTarget(self, action: #selector(rateButtonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -56,6 +60,8 @@ class SettingsController: UIViewController {
         button.setTitle(NSLocalizedString("Delete all scans", comment: ""), for: .normal)
         button.setTitleColor(.red, for: .normal)
         button.contentHorizontalAlignment = .left
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.backgroundColor = .white
         button.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -82,7 +88,7 @@ class SettingsController: UIViewController {
         title = NSLocalizedString("Settings", comment: "")
         
         // Set background color
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.Design.background
         
         // Scroll view
         view.addSubview(scrollView)
@@ -107,24 +113,24 @@ class SettingsController: UIViewController {
         NSLayoutConstraint.activate([
             emailButton.heightAnchor.constraint(equalToConstant: 44),
             emailButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            emailButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            emailButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            emailButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            emailButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0)
         ])
         
         contentView.addSubview(rateButton)
         NSLayoutConstraint.activate([
             rateButton.heightAnchor.constraint(equalToConstant: 44),
             rateButton.topAnchor.constraint(equalTo: emailButton.bottomAnchor, constant: 16),
-            rateButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            rateButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            rateButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            rateButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0)
         ])
         
         contentView.addSubview(deleteButton)
         NSLayoutConstraint.activate([
             deleteButton.heightAnchor.constraint(equalToConstant: 44),
             deleteButton.topAnchor.constraint(equalTo: rateButton.bottomAnchor, constant: 16),
-            deleteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            deleteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0)
         ])
         
         contentView.addSubview(appVersionLabel)

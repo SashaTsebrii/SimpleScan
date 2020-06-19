@@ -39,7 +39,7 @@ class ListController: UIViewController {
         title = NSLocalizedString("Documents", comment: "")
         
         // Set background color
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.Design.background
         
         // Collection view constraints
         view.addSubview(collectionView)

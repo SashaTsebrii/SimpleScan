@@ -33,6 +33,12 @@ class ScanController: UIViewController {
         super.loadView()
         
         // Set title
+        title = NSLocalizedString("New document", comment: "")
+        
+        // Set background color
+        view.backgroundColor = UIColor.Design.background
+        
+        // Set title
         title = NSLocalizedString("Preview", comment: "")
         
         view.addSubview(pdfView)

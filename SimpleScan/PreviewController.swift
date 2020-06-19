@@ -33,7 +33,8 @@ class PreviewController: UIViewController {
     override func loadView() {
         super.loadView()
         
-        view.backgroundColor = .white
+        // Set background color
+        view.backgroundColor = UIColor.Design.background
         
         // Pdf view constraints
         view.addSubview(pdfView)
