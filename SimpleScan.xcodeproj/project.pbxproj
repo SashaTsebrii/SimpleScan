@@ -19,6 +19,8 @@
 		47A774EF248B8A00003E2603 /* SimpleScan.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 47A774ED248B8A00003E2603 /* SimpleScan.xcdatamodeld */; };
 		47A774F1248BB002003E2603 /* ScanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774F0248BB002003E2603 /* ScanController.swift */; };
 		47A774F3248C2390003E2603 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774F2248C2390003E2603 /* Constants.swift */; };
+		47DEDF95249D6D4600E5F82B /* EditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DEDF94249D6D4600E5F82B /* EditController.swift */; };
+		47DEDF97249DFC4E00E5F82B /* EditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DEDF96249DFC4E00E5F82B /* EditCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		47A774EE248B8A00003E2603 /*  */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; name = ""; sourceTree = "<group>"; };
 		47A774F0248BB002003E2603 /* ScanController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanController.swift; sourceTree = "<group>"; };
 		47A774F2248C2390003E2603 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		47DEDF94249D6D4600E5F82B /* EditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditController.swift; sourceTree = "<group>"; };
+		47DEDF96249DFC4E00E5F82B /* EditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +80,8 @@
 				473084622496DDBC005D6837 /* CellPreviewController.swift */,
 				47A774F0248BB002003E2603 /* ScanController.swift */,
 				47A774C224897AE5003E2603 /* PreviewController.swift */,
+				47DEDF94249D6D4600E5F82B /* EditController.swift */,
+				47DEDF96249DFC4E00E5F82B /* EditCell.swift */,
 				47A774C624898199003E2603 /* SettingsController.swift */,
 				4711D515248797A100A782E8 /* Assets.xcassets */,
 				4711D517248797A100A782E8 /* LaunchScreen.storyboard */,
@@ -158,7 +164,9 @@
 				47A774F1248BB002003E2603 /* ScanController.swift in Sources */,
 				47A774C724898199003E2603 /* SettingsController.swift in Sources */,
 				47A774BF24896671003E2603 /* AppDelegate.swift in Sources */,
+				47DEDF97249DFC4E00E5F82B /* EditCell.swift in Sources */,
 				4711D5112487979E00A782E8 /* ListController.swift in Sources */,
+				47DEDF95249D6D4600E5F82B /* EditController.swift in Sources */,
 				47A774C324897AE5003E2603 /* PreviewController.swift in Sources */,
 				47A774BD248963E3003E2603 /* ListCell.swift in Sources */,
 				473084632496DDBC005D6837 /* CellPreviewController.swift in Sources */,

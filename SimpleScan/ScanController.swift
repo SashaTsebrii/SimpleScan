@@ -18,7 +18,7 @@ class ScanController: UIViewController {
     
     var pdfView: PDFView = {
         let pdfView = PDFView()
-        pdfView.backgroundColor = .white
+        pdfView.backgroundColor = .clear
         pdfView.autoScales = true
         pdfView.displayDirection = .vertical
         pdfView.pageShadowsEnabled = false
@@ -31,9 +31,6 @@ class ScanController: UIViewController {
     
     override func loadView() {
         super.loadView()
-        
-        // Set title
-        title = NSLocalizedString("New document", comment: "")
         
         // Set background color
         view.backgroundColor = UIColor.Design.background

@@ -19,7 +19,7 @@ class PreviewController: UIViewController {
     
     var pdfView: PDFView = {
         let pdfView = PDFView()
-        pdfView.backgroundColor = .white
+        pdfView.backgroundColor = .clear
         pdfView.autoScales = true
         pdfView.displayDirection = .vertical
         pdfView.pageShadowsEnabled = false
@@ -45,9 +45,11 @@ class PreviewController: UIViewController {
             pdfView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
-        // Create right bar button item
+        // Create right bar button items
+        let editBarButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(editBarButtonTapped(_:)))
+        
         let shareBarButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonTapped(_:)))
-        navigationItem.rightBarButtonItem = shareBarButton
+        navigationItem.rightBarButtonItems = [shareBarButton, editBarButton]
         
     }
     
@@ -127,6 +129,16 @@ class PreviewController: UIViewController {
 
         } else {
             print("Error no document")
+        }
+        
+    }
+    
+    @objc fileprivate func editBarButtonTapped(_ sender: UIBarButtonItem) {
+        
+        if let document = document {
+            let editController = EditController()
+            editController.document = document
+            navigationController?.pushViewController(editController, animated: true)
         }
         
     }
