@@ -142,8 +142,15 @@ class ScanController: UIViewController {
     
     fileprivate func scan() {
         
-        UINavigationBar.appearance().tintColor = .black
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.black]
+        if self.traitCollection.userInterfaceStyle == .dark {
+            // User interface is dark
+            let sharedApp = UIApplication.shared
+            sharedApp.delegate?.window??.tintColor = .white
+        } else {
+            // User interface is light
+            UINavigationBar.appearance().tintColor = .black
+            UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.black]
+        }
         
         let scannerViewController = VNDocumentCameraViewController()
         scannerViewController.delegate = self
@@ -159,8 +166,15 @@ extension ScanController: VNDocumentCameraViewControllerDelegate {
     
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
         
-        UINavigationBar.appearance().tintColor = .white
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
+        if self.traitCollection.userInterfaceStyle == .dark {
+            // User Interface is Dark
+            let sharedApp = UIApplication.shared
+            sharedApp.delegate?.window??.tintColor = .black
+        } else {
+            // User Interface is Light
+            UINavigationBar.appearance().tintColor = .white
+            UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
+        }
         
         guard scan.pageCount >= 1 else {
             controller.dismiss(animated: true)
@@ -204,8 +218,15 @@ extension ScanController: VNDocumentCameraViewControllerDelegate {
         
         controller.dismiss(animated: true)
         
-        UINavigationBar.appearance().tintColor = .white
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
+        if self.traitCollection.userInterfaceStyle == .dark {
+            // User Interface is Dark
+            let sharedApp = UIApplication.shared
+            sharedApp.delegate?.window??.tintColor = .black
+        } else {
+            // User Interface is Light
+            UINavigationBar.appearance().tintColor = .white
+            UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
+        }
         
         navigationController?.popToRootViewController(animated: false)
         
