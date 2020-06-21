@@ -17,7 +17,7 @@ class PreviewController: UIViewController {
     
     // MARK: Prpperties
     
-    var pdfView: PDFView = {
+    fileprivate let pdfView: PDFView = {
         let pdfView = PDFView()
         pdfView.backgroundColor = .clear
         pdfView.autoScales = true
@@ -45,11 +45,24 @@ class PreviewController: UIViewController {
             pdfView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
-        // Create right bar button items
-        let editBarButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(editBarButtonTapped(_:)))
+        // Create edit bar button item
+        let editButton = UIButton(frame: .zero)
+        editButton.tintColor = .white
+        editButton.setImage(UIImage(named: "edit"), for: .normal)
+        editButton.addTarget(self, action: #selector(editBarButtonTapped(_:)), for: .touchUpInside)
+        let editBarButton = UIBarButtonItem(customView: editButton)
         
-        let shareBarButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonTapped(_:)))
-        navigationItem.rightBarButtonItems = [shareBarButton, editBarButton]
+        // Create share bar button item
+        let shareButton = UIButton(frame: .zero)
+        shareButton.tintColor = .white
+        shareButton.setImage(UIImage(named: "share"), for: .normal)
+        shareButton.addTarget(self, action: #selector(shareBarButtonTapped(_:)), for: .touchUpInside)
+        let shareBarButton = UIBarButtonItem(customView: shareButton)
+        
+        let spaceBarButton = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        spaceBarButton.width = 16
+        
+        navigationItem.rightBarButtonItems = [shareBarButton, spaceBarButton, editBarButton]
         
     }
     
@@ -93,7 +106,7 @@ class PreviewController: UIViewController {
     
     // MARK: Actions
     
-    @objc fileprivate func shareBarButtonTapped(_ sender: UIBarButtonItem) {
+    @objc fileprivate func shareBarButtonTapped(_ sender: UIButton) {
         
         if let document = document, let idString = document.idString {
 
@@ -133,7 +146,7 @@ class PreviewController: UIViewController {
         
     }
     
-    @objc fileprivate func editBarButtonTapped(_ sender: UIBarButtonItem) {
+    @objc fileprivate func editBarButtonTapped(_ sender: UIButton) {
         
         if let document = document {
             let editController = EditController()

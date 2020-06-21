@@ -16,7 +16,7 @@ class ScanController: UIViewController {
     
     // MARK: Properties
     
-    var pdfView: PDFView = {
+    fileprivate let pdfView: PDFView = {
         let pdfView = PDFView()
         pdfView.backgroundColor = .clear
         pdfView.autoScales = true

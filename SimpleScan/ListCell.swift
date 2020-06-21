@@ -36,7 +36,7 @@ class ListCell: UICollectionViewCell {
     
     // MARK: Properties
     
-    var previewImageView: UIImageView = {
+    let previewImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
@@ -44,7 +44,7 @@ class ListCell: UICollectionViewCell {
         return imageView
     }()
     
-    fileprivate var nameLabel: UILabel = {
+    fileprivate let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .black
@@ -53,7 +53,7 @@ class ListCell: UICollectionViewCell {
         return label
     }()
     
-    fileprivate var createDateLabel: UILabel = {
+    fileprivate let createDateLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray

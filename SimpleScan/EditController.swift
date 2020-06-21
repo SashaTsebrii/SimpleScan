@@ -49,8 +49,12 @@ class EditController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
-        // Create right bar button item
-        let saveBarButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveBarButtonTapped(_:)))
+        // Create save bar button item
+        let saveButton = UIButton(frame: .zero)
+        saveButton.tintColor = .white
+        saveButton.setImage(UIImage(named: "save"), for: .normal)
+        saveButton.addTarget(self, action: #selector(saveBarButtonTapped(_:)), for: .touchUpInside)
+        let saveBarButton = UIBarButtonItem(customView: saveButton)
         navigationItem.rightBarButtonItem = saveBarButton
         
     }
@@ -87,7 +91,7 @@ class EditController: UIViewController {
     
     // MARK: Actions
     
-    @objc fileprivate func saveBarButtonTapped(_ sendr: UIBarButtonItem) {
+    @objc fileprivate func saveBarButtonTapped(_ sendr: UIButton) {
         
         navigationController?.popViewController(animated: true)
         

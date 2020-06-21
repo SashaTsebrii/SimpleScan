@@ -50,16 +50,20 @@ class ListController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
-        // Create left bar button item
-        let button = UIButton(frame: .zero)
-        button.tintColor = .white
-        button.setImage(UIImage(named: "settings"), for: .normal)
-        button.addTarget(self, action: #selector(settingsBarButtonTapped(_:)), for: .touchUpInside)
-        let settingsBarButton = UIBarButtonItem(customView: button)
+        // Create settings bar button item
+        let settingsButton = UIButton(frame: .zero)
+        settingsButton.tintColor = .white
+        settingsButton.setImage(UIImage(named: "settings"), for: .normal)
+        settingsButton.addTarget(self, action: #selector(settingsBarButtonTapped(_:)), for: .touchUpInside)
+        let settingsBarButton = UIBarButtonItem(customView: settingsButton)
         navigationItem.leftBarButtonItem = settingsBarButton
         
-        // Create right bar button item
-        let scanBarButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(scanBarButtonTapped(_:)))
+        // Create scan bar button item
+        let scanButton = UIButton(frame: .zero)
+        scanButton.tintColor = .white
+        scanButton.setImage(UIImage(named: "capture"), for: .normal)
+        scanButton.addTarget(self, action: #selector(scanBarButtonTapped(_:)), for: .touchUpInside)
+        let scanBarButton = UIBarButtonItem(customView: scanButton)
         navigationItem.rightBarButtonItem = scanBarButton
         
     }
@@ -87,7 +91,7 @@ class ListController: UIViewController {
         
     }
     
-    @objc fileprivate func scanBarButtonTapped(_ sendr: UIBarButtonItem) {
+    @objc fileprivate func scanBarButtonTapped(_ sendr: UIButton) {
         
         let scanController = ScanController()
         navigationController?.pushViewController(scanController, animated: true)
@@ -109,8 +113,8 @@ class ListController: UIViewController {
     
     // Set up ContextMenu
     func makeContextMenu(for document: Document, at indexPath: IndexPath) -> UIMenu {
-        
-        let rename = UIAction(title: "Rename", image: UIImage(systemName: "square.and.pencil")) { action in
+        // UIImage(systemName: "square.and.pencil")
+        let rename = UIAction(title: "Rename", image: UIImage(named: "edit_appearances")) { action in
             
             // Show rename UI
             let alertController = UIAlertController(title: "", message: "", preferredStyle: .alert)
@@ -140,7 +144,8 @@ class ListController: UIViewController {
         }
 
         // Here we specify the "destructive" attribute to show that it’s destructive in nature
-        let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
+        // UIImage(systemName: "trash")
+        let delete = UIAction(title: "Delete", image: UIImage(named: "delete"), attributes: .destructive) { action in
             
             // Delete this document
             let alertController = UIAlertController(title: NSLocalizedString("Are you sure?", comment: ""), message: NSLocalizedString("Selected pdf documents will be deleted. Delete pdf documents?", comment: ""), preferredStyle: .alert)
@@ -167,7 +172,8 @@ class ListController: UIViewController {
         let edit = UIMenu(title: "Edit...", children: [rename, delete])
 
         // Create a UIAction for sharing
-        let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up")) { action in
+        // UIImage(systemName: "square.and.arrow.up")
+        let share = UIAction(title: "Share", image: UIImage(named: "share_appearances")) { action in
             // Show system share sheet
             
             if let idString = document.idString {

@@ -79,10 +79,19 @@ class SettingsController: UIViewController {
             label.text = NSLocalizedString("App version: \(String(describing: appVersion))", comment: "")
         }
         label.textAlignment = .left
-        label.textColor = .gray
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    fileprivate let appImageView: UIImageView = {
+        let imageView = UIImageView(frame: .zero)
+        imageView.image = UIImage(named: "app")
+        imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .clear
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     // MARK: Lifecycle
@@ -139,12 +148,19 @@ class SettingsController: UIViewController {
             deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0)
         ])
         
+        contentView.addSubview(appImageView)
+        NSLayoutConstraint.activate([
+            appImageView.widthAnchor.constraint(equalToConstant: 32),
+            appImageView.heightAnchor.constraint(equalTo: appImageView.widthAnchor),
+            appImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            appImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
+        ])
+        
         contentView.addSubview(appVersionLabel)
         NSLayoutConstraint.activate([
             appVersionLabel.heightAnchor.constraint(equalToConstant: 16),
-            appVersionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            appVersionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            appVersionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
+            appVersionLabel.leadingAnchor.constraint(equalTo: appImageView.trailingAnchor, constant: 8),
+            appVersionLabel.centerYAnchor.constraint(equalTo: appImageView.centerYAnchor)
         ])
         
     }
