@@ -59,10 +59,17 @@ class PreviewController: UIViewController {
         shareButton.addTarget(self, action: #selector(shareBarButtonTapped(_:)), for: .touchUpInside)
         let shareBarButton = UIBarButtonItem(customView: shareButton)
         
+        // Create change bar button item
+        let changeButton = UIButton(frame: .zero)
+        changeButton.tintColor = .white
+        changeButton.setImage(UIImage(named: "change"), for: .normal)
+        changeButton.addTarget(self, action: #selector(changeBarButtonTapped(_:)), for: .touchUpInside)
+        let changeBarButton = UIBarButtonItem(customView: changeButton)
+        
         let spaceBarButton = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         spaceBarButton.width = 16
         
-        navigationItem.rightBarButtonItems = [shareBarButton, spaceBarButton, editBarButton]
+        navigationItem.rightBarButtonItems = [shareBarButton, spaceBarButton, editBarButton, spaceBarButton, changeBarButton]
         
     }
     
@@ -147,6 +154,16 @@ class PreviewController: UIViewController {
     }
     
     @objc fileprivate func editBarButtonTapped(_ sender: UIButton) {
+        
+        if let document = document {
+            let annotationController = AnnotationController()
+            annotationController.document = document
+            navigationController?.pushViewController(annotationController, animated: true)
+        }
+        
+    }
+    
+    @objc fileprivate func changeBarButtonTapped(_ sender: UIButton) {
         
         if let document = document {
             let editController = EditController()
