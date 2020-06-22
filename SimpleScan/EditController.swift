@@ -14,7 +14,7 @@ class EditController: UIViewController {
     // MARK: Variables
     
     var document: Document?
-    var pdfDocument: PDFDocument?
+    fileprivate var pdfDocument: PDFDocument?
     
     // MARK: Prpperties
     

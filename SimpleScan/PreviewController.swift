@@ -33,6 +33,9 @@ class PreviewController: UIViewController {
     override func loadView() {
         super.loadView()
         
+        // Set title
+        title = NSLocalizedString("Preview", comment: "")
+        
         // Set background color
         view.backgroundColor = UIColor.Design.background
         
@@ -75,9 +78,6 @@ class PreviewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Set title
-        title = NSLocalizedString("Preview", comment: "")
         
         if let document = document, let idString = document.idString {
             
