@@ -9,9 +9,15 @@
 import UIKit
 import PDFKit
 
+protocol EditCellDelegate {
+    func tapDeleteButton(at cell: EditCell)
+}
+
 class EditCell: UICollectionViewCell {
     
     // MARK: Variables
+    
+    var delegate: EditCellDelegate?
     
     static let identifier = "EditCell"
     
@@ -71,6 +77,7 @@ class EditCell: UICollectionViewCell {
     fileprivate let deleteButton: UIButton = {
         let button = UIButton(frame: .zero)
         button.setImage(UIImage(named: "delete"), for: .normal)
+        button.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -117,6 +124,27 @@ class EditCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+
+        guard isUserInteractionEnabled else { return nil }
+        guard !isHidden else { return nil }
+        guard alpha >= 0.01 else { return nil }
+        guard self.point(inside: point, with: event) else { return nil }
+        
+        if deleteButton.point(inside: convert(point, to: deleteButton), with: event) {
+            return deleteButton
+        }
+        
+        return super.hitTest(point, with: event)
+        
+    }
+    
+    // MARK: Actions
+    
+    @objc fileprivate func deleteButtonTapped(_ sender: UIButton) {
+        delegate?.tapDeleteButton(at: self)
     }
     
     // MARK: Helper

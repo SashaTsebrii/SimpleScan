@@ -125,6 +125,7 @@ extension EditController: UICollectionViewDataSource, UICollectionViewDelegate, 
             let page = pdfDocument.page(at: indexPath.row)
             cell.page = page
             cell.pageOfPages = (indexPath.row, pdfDocument.pageCount)
+            cell.delegate = self
         }
         
         return cell
@@ -207,3 +208,11 @@ extension EditController: UICollectionViewDataSource, UICollectionViewDelegate, 
     
 }
 
+extension EditController: EditCellDelegate {
+    
+    func tapDeleteButton(at cell: EditCell) {
+        let indexPath = collectionView.indexPath(for: cell)
+        print(indexPath ?? "indexPath is nil")
+    }
+    
+}
