@@ -14,12 +14,12 @@
 		4721473824A16D6F00D386E5 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4721473724A16D6E00D386E5 /* Line.swift */; };
 		4721473A24A16DAF00D386E5 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4721473924A16DAF00D386E5 /* CanvasView.swift */; };
 		473084632496DDBC005D6837 /* CellPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473084622496DDBC005D6837 /* CellPreviewController.swift */; };
+		474D738324A18DF50066CD42 /* SimpleScan.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 474D738224A18DF50066CD42 /* SimpleScan.xcdatamodel */; };
 		47A774BD248963E3003E2603 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774BC248963E3003E2603 /* ListCell.swift */; };
 		47A774BF24896671003E2603 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4711D50C2487979E00A782E8 /* AppDelegate.swift */; };
 		47A774C324897AE5003E2603 /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774C224897AE5003E2603 /* PreviewController.swift */; };
 		47A774C724898199003E2603 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774C624898199003E2603 /* SettingsController.swift */; };
 		47A774C924898DE9003E2603 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774C824898DE9003E2603 /* Extensions.swift */; };
-		47A774EF248B8A00003E2603 /* SimpleScan.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 47A774ED248B8A00003E2603 /* SimpleScan.xcdatamodeld */; };
 		47A774F1248BB002003E2603 /* ScanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774F0248BB002003E2603 /* ScanController.swift */; };
 		47A774F3248C2390003E2603 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A774F2248C2390003E2603 /* Constants.swift */; };
 		47DEDF95249D6D4600E5F82B /* EditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DEDF94249D6D4600E5F82B /* EditController.swift */; };
@@ -37,11 +37,11 @@
 		4721473724A16D6E00D386E5 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		4721473924A16DAF00D386E5 /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
 		473084622496DDBC005D6837 /* CellPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellPreviewController.swift; sourceTree = "<group>"; };
+		474D738224A18DF50066CD42 /* SimpleScan.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimpleScan.xcdatamodel; sourceTree = "<group>"; };
 		47A774BC248963E3003E2603 /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		47A774C224897AE5003E2603 /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
 		47A774C624898199003E2603 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		47A774C824898DE9003E2603 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		47A774EE248B8A00003E2603 /*  */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; name = ""; sourceTree = "<group>"; };
 		47A774F0248BB002003E2603 /* ScanController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanController.swift; sourceTree = "<group>"; };
 		47A774F2248C2390003E2603 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		47DEDF94249D6D4600E5F82B /* EditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditController.swift; sourceTree = "<group>"; };
@@ -95,7 +95,7 @@
 				4711D515248797A100A782E8 /* Assets.xcassets */,
 				4711D517248797A100A782E8 /* LaunchScreen.storyboard */,
 				4711D51A248797A100A782E8 /* Info.plist */,
-				47A774ED248B8A00003E2603 /* SimpleScan.xcdatamodeld */,
+				474D738224A18DF50066CD42 /* SimpleScan.xcdatamodel */,
 			);
 			path = SimpleScan;
 			sourceTree = "<group>";
@@ -179,10 +179,10 @@
 				47DEDF95249D6D4600E5F82B /* EditController.swift in Sources */,
 				4721473624A1468200D386E5 /* AnnotationController.swift in Sources */,
 				4721473A24A16DAF00D386E5 /* CanvasView.swift in Sources */,
+				474D738324A18DF50066CD42 /* SimpleScan.xcdatamodel in Sources */,
 				47A774C324897AE5003E2603 /* PreviewController.swift in Sources */,
 				47A774BD248963E3003E2603 /* ListCell.swift in Sources */,
 				473084632496DDBC005D6837 /* CellPreviewController.swift in Sources */,
-				47A774EF248B8A00003E2603 /* SimpleScan.xcdatamodeld in Sources */,
 				47A774C924898DE9003E2603 /* Extensions.swift in Sources */,
 				47A774F3248C2390003E2603 /* Constants.swift in Sources */,
 			);
@@ -378,19 +378,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		47A774ED248B8A00003E2603 /* SimpleScan.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				47A774EE248B8A00003E2603 /*  */,
-			);
-			currentVersion = 47A774EE248B8A00003E2603 /*  */;
-			path = SimpleScan.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 4711D5012487979E00A782E8 /* Project object */;
 }
