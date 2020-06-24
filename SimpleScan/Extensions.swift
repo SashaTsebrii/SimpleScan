@@ -40,6 +40,7 @@ extension UIColor {
     // Custom colors
     struct Design {
         static let background = UIColor(netHex: 0xF4F4F4)
+        static let navigationBar = UIColor(netHex: 0x303030)
     }
     
 }

@@ -17,6 +17,22 @@ class AnnotationController: UIViewController {
     
     // MARK: Prpperties
     
+    fileprivate let scrollView: UIScrollView = {
+        let scrollView = UIScrollView(frame: .zero)
+        scrollView.backgroundColor = .white
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    fileprivate let contentView: UIView = {
+        let view = UIView(frame: .zero)
+        view.backgroundColor = UIColor.clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     fileprivate let pdfView: PDFView = {
         let pdfView = PDFView()
         pdfView.backgroundColor = .clear
@@ -102,10 +118,35 @@ class AnnotationController: UIViewController {
         // Set background color
         view.backgroundColor = UIColor.Design.background
         
+        // Scroll view
+        view.addSubview(scrollView)
+        NSLayoutConstraint.activate([
+            scrollView.heightAnchor.constraint(equalToConstant: 44),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+        
+        // Content view
+        scrollView.addSubview(contentView)
+        NSLayoutConstraint.activate([
+            contentView.widthAnchor.constraint(equalToConstant: 700),
+            contentView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
+        ])
+        
+        view.addSubview(scrollView)
+        NSLayoutConstraint.activate([
+            
+        ])
+        
         // Pdf view constraints
         view.addSubview(pdfView)
         NSLayoutConstraint.activate([
-            pdfView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            pdfView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
             pdfView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             pdfView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             pdfView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
