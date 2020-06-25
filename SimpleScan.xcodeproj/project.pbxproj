@@ -10,6 +10,7 @@
 		4711D5112487979E00A782E8 /* ListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4711D5102487979E00A782E8 /* ListController.swift */; };
 		4711D516248797A100A782E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4711D515248797A100A782E8 /* Assets.xcassets */; };
 		4711D519248797A100A782E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4711D517248797A100A782E8 /* LaunchScreen.storyboard */; };
+		471B34CD24A3CC7300DE4B39 /* ColorsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471B34CC24A3CC7300DE4B39 /* ColorsController.swift */; };
 		4721473624A1468200D386E5 /* AnnotationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4721473524A1468200D386E5 /* AnnotationController.swift */; };
 		4721473824A16D6F00D386E5 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4721473724A16D6E00D386E5 /* Line.swift */; };
 		4721473A24A16DAF00D386E5 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4721473924A16DAF00D386E5 /* CanvasView.swift */; };
@@ -33,6 +34,7 @@
 		4711D515248797A100A782E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4711D518248797A100A782E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4711D51A248797A100A782E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		471B34CC24A3CC7300DE4B39 /* ColorsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsController.swift; sourceTree = "<group>"; };
 		4721473524A1468200D386E5 /* AnnotationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationController.swift; sourceTree = "<group>"; };
 		4721473724A16D6E00D386E5 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		4721473924A16DAF00D386E5 /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				47DEDF94249D6D4600E5F82B /* EditController.swift */,
 				47DEDF96249DFC4E00E5F82B /* EditCell.swift */,
 				4721473524A1468200D386E5 /* AnnotationController.swift */,
+				471B34CC24A3CC7300DE4B39 /* ColorsController.swift */,
 				4721473724A16D6E00D386E5 /* Line.swift */,
 				4721473924A16DAF00D386E5 /* CanvasView.swift */,
 				4711D515248797A100A782E8 /* Assets.xcassets */,
@@ -177,6 +180,7 @@
 				4711D5112487979E00A782E8 /* ListController.swift in Sources */,
 				4721473824A16D6F00D386E5 /* Line.swift in Sources */,
 				47DEDF95249D6D4600E5F82B /* EditController.swift in Sources */,
+				471B34CD24A3CC7300DE4B39 /* ColorsController.swift in Sources */,
 				4721473624A1468200D386E5 /* AnnotationController.swift in Sources */,
 				4721473A24A16DAF00D386E5 /* CanvasView.swift in Sources */,
 				474D738324A18DF50066CD42 /* SimpleScan.xcdatamodel in Sources */,

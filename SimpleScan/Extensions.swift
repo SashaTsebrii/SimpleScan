@@ -10,6 +10,18 @@ import UIKit
 
 // MARK: -
 
+extension UIView  {
+    // Render the view within the view's bounds, then capture it as image
+  func asImage() -> UIImage {
+    let renderer = UIGraphicsImageRenderer(bounds: bounds)
+    return renderer.image(actions: { rendererContext in
+        layer.render(in: rendererContext.cgContext)
+    })
+  }
+}
+
+// MARK: -
+
 extension UIImage {
     
     func resize(toWidth width: CGFloat) -> UIImage? {

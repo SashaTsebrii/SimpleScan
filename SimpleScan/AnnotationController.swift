@@ -138,9 +138,19 @@ class AnnotationController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
         ])
         
-        view.addSubview(scrollView)
+        // Set
+        let colorsButton = UIButton(frame: .zero)
+        colorsButton.setTitle("Color", for: .normal)
+        colorsButton.setTitleColor(.black, for: .normal)
+        colorsButton.addTarget(self, action: #selector(colorsButtonTapped(_:)), for: .touchUpInside)
+        colorsButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(colorsButton)
         NSLayoutConstraint.activate([
-            
+            colorsButton.widthAnchor.constraint(equalToConstant: 44),
+            colorsButton.heightAnchor.constraint(equalTo: colorsButton.widthAnchor),
+            colorsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            colorsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
         // Pdf view constraints
@@ -164,10 +174,12 @@ class AnnotationController: UIViewController {
         let colorsStack = UIStackView(arrangedSubviews: [redButton, greenButton, blueButton])
         colorsStack.spacing = 4
         colorsStack.distribution = .fillEqually
+        colorsStack.translatesAutoresizingMaskIntoConstraints = false
         
         let buttonsStack = UIStackView(arrangedSubviews: [undoButton, clearButton])
         buttonsStack.spacing = 4
         buttonsStack.distribution = .fillEqually
+        buttonsStack.translatesAutoresizingMaskIntoConstraints = false
         
         let generalStack = UIStackView(arrangedSubviews: [buttonsStack, colorsStack, slider])
         generalStack.spacing = 8
@@ -234,6 +246,13 @@ class AnnotationController: UIViewController {
         */
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+        
+    }
+    
     // MARK: Actions
     
     @objc fileprivate func saveBarButtonTapped(_ sender: UIButton) {
@@ -254,6 +273,32 @@ class AnnotationController: UIViewController {
     
     @objc fileprivate func handleSliderChange(_ sender: UISlider) {
         canvasView.setStrokeWidth(width: sender.value)
+    }
+    
+    @objc fileprivate func colorsButtonTapped(_ sender: UIButton) {
+        
+        // Add the bottom colors view
+        setUpColorsController()
+        
+    }
+    
+    // MARK: Helper
+    
+    func setUpColorsController() {
+        
+        // Init colorsController
+        let colorsController = ColorsController()
+
+        // Add bottomSheetVC as a child view
+        addChild(colorsController)
+        view.addSubview(colorsController.view)
+        colorsController.didMove(toParent: self)
+
+        // Adjust colorsController frame and initial position
+        let height = view.frame.height
+        let width  = view.frame.width
+        colorsController.view.frame = CGRect(x: 0, y: view.frame.maxY, width: width, height: height)
+        
     }
     
 }
