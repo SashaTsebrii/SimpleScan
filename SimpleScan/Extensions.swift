@@ -55,6 +55,16 @@ extension UIColor {
         static let navigationBar = UIColor(netHex: 0x303030)
     }
     
+    struct Colors {
+        static let red = UIColor.systemRed
+        static let orange = UIColor.systemOrange
+        static let yellow = UIColor.systemYellow
+        static let green = UIColor.systemGreen
+        static let teal = UIColor.systemTeal
+        static let blue = UIColor.systemBlue
+        static let purple = UIColor.systemPurple
+    }
+    
 }
 
 // MARK: -

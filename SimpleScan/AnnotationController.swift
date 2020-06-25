@@ -66,46 +66,46 @@ class AnnotationController: UIViewController {
         return button
     }()
     
-    let redButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .red
-        button.layer.borderWidth = 1
-        button.addTarget(self, action: #selector(handleColorChange(_:)), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    let greenButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .green
-        button.layer.borderWidth = 1
-        button.addTarget(self, action: #selector(handleColorChange(_:)), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    let blueButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.backgroundColor = .blue
-        button.layer.borderWidth = 1
-        button.addTarget(self, action: #selector(handleColorChange(_:)), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    let slider: UISlider = {
-        let slider = UISlider()
-        slider.minimumValue = 1
-        slider.maximumValue = 10
-        slider.addTarget(self, action: #selector(handleSliderChange(_:)), for: .valueChanged)
-        return slider
-    }()
+//    let redButton: UIButton = {
+//        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+//        button.layer.cornerRadius = 16
+//        button.layer.masksToBounds = true
+//        button.backgroundColor = .red
+//        button.layer.borderWidth = 1
+//        button.addTarget(self, action: #selector(handleColorChange(_:)), for: .touchUpInside)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        return button
+//    }()
+//    
+//    let greenButton: UIButton = {
+//        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+//        button.layer.cornerRadius = 16
+//        button.layer.masksToBounds = true
+//        button.backgroundColor = .green
+//        button.layer.borderWidth = 1
+//        button.addTarget(self, action: #selector(handleColorChange(_:)), for: .touchUpInside)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        return button
+//    }()
+//    
+//    let blueButton: UIButton = {
+//        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+//        button.layer.cornerRadius = 16
+//        button.layer.masksToBounds = true
+//        button.backgroundColor = .blue
+//        button.layer.borderWidth = 1
+//        button.addTarget(self, action: #selector(handleColorChange(_:)), for: .touchUpInside)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        return button
+//    }()
+//    
+//    let slider: UISlider = {
+//        let slider = UISlider()
+//        slider.minimumValue = 1
+//        slider.maximumValue = 10
+//        slider.addTarget(self, action: #selector(handleSliderChange(_:)), for: .valueChanged)
+//        return slider
+//    }()
     
     // MARK: Lifecycle
     
@@ -138,19 +138,32 @@ class AnnotationController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
         ])
         
-        // Set
-        let colorsButton = UIButton(frame: .zero)
-        colorsButton.setTitle("Color", for: .normal)
-        colorsButton.setTitleColor(.black, for: .normal)
-        colorsButton.addTarget(self, action: #selector(colorsButtonTapped(_:)), for: .touchUpInside)
-        colorsButton.translatesAutoresizingMaskIntoConstraints = false
+        // Set penButton
+        let penButton = UIButton(frame: .zero)
+        penButton.setImage(UIImage(named: "pen"), for: .normal)
+        penButton.addTarget(self, action: #selector(penButtonTapped(_:)), for: .touchUpInside)
+        penButton.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.addSubview(colorsButton)
+        contentView.addSubview(penButton)
         NSLayoutConstraint.activate([
-            colorsButton.widthAnchor.constraint(equalToConstant: 44),
-            colorsButton.heightAnchor.constraint(equalTo: colorsButton.widthAnchor),
-            colorsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            colorsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            penButton.widthAnchor.constraint(equalToConstant: 44),
+            penButton.heightAnchor.constraint(equalTo: penButton.widthAnchor),
+            penButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            penButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+        
+        // Set markerButton
+        let markerButton = UIButton(frame: .zero)
+        markerButton.setImage(UIImage(named: "marker"), for: .normal)
+        markerButton.addTarget(self, action: #selector(markerButtonTapped(_:)), for: .touchUpInside)
+        markerButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(markerButton)
+        NSLayoutConstraint.activate([
+            markerButton.widthAnchor.constraint(equalToConstant: 44),
+            markerButton.heightAnchor.constraint(equalTo: markerButton.widthAnchor),
+            markerButton.leadingAnchor.constraint(equalTo: penButton.trailingAnchor, constant: 4),
+            markerButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
         // Pdf view constraints
@@ -171,27 +184,27 @@ class AnnotationController: UIViewController {
             canvasView.bottomAnchor.constraint(equalTo: pdfView.bottomAnchor)
         ])
         
-        let colorsStack = UIStackView(arrangedSubviews: [redButton, greenButton, blueButton])
-        colorsStack.spacing = 4
-        colorsStack.distribution = .fillEqually
-        colorsStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        let buttonsStack = UIStackView(arrangedSubviews: [undoButton, clearButton])
-        buttonsStack.spacing = 4
-        buttonsStack.distribution = .fillEqually
-        buttonsStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        let generalStack = UIStackView(arrangedSubviews: [buttonsStack, colorsStack, slider])
-        generalStack.spacing = 8
-        generalStack.distribution = .fillEqually
-        generalStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(generalStack)
-        NSLayoutConstraint.activate([
-            generalStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            generalStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            generalStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+//        let colorsStack = UIStackView(arrangedSubviews: [redButton, greenButton, blueButton])
+//        colorsStack.spacing = 4
+//        colorsStack.distribution = .fillEqually
+//        colorsStack.translatesAutoresizingMaskIntoConstraints = false
+//        
+//        let buttonsStack = UIStackView(arrangedSubviews: [undoButton, clearButton])
+//        buttonsStack.spacing = 4
+//        buttonsStack.distribution = .fillEqually
+//        buttonsStack.translatesAutoresizingMaskIntoConstraints = false
+//        
+//        let generalStack = UIStackView(arrangedSubviews: [buttonsStack, colorsStack, slider])
+//        generalStack.spacing = 8
+//        generalStack.distribution = .fillEqually
+//        generalStack.translatesAutoresizingMaskIntoConstraints = false
+//        
+//        view.addSubview(generalStack)
+//        NSLayoutConstraint.activate([
+//            generalStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+//            generalStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+//            generalStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+//        ])
         
         // Create save bar button item
         let saveButton = UIButton(frame: .zero)
@@ -267,37 +280,58 @@ class AnnotationController: UIViewController {
         canvasView.clear()
     }
     
-    @objc fileprivate func handleColorChange(_ sender: UIButton) {
-        canvasView.setStrokeColor(color: sender.backgroundColor ?? .black)
-    }
+//    @objc fileprivate func handleColorChange(_ sender: UIButton) {
+//        canvasView.setStrokeColor(color: sender.backgroundColor ?? .black)
+//    }
+//    
+//    @objc fileprivate func handleSliderChange(_ sender: UISlider) {
+//        canvasView.setStrokeWidth(width: sender.value)
+//    }
     
-    @objc fileprivate func handleSliderChange(_ sender: UISlider) {
-        canvasView.setStrokeWidth(width: sender.value)
-    }
-    
-    @objc fileprivate func colorsButtonTapped(_ sender: UIButton) {
+    @objc fileprivate func penButtonTapped(_ sender: UIButton) {
         
         // Add the bottom colors view
-        setUpColorsController()
+        setUpPenController()
+        
+    }
+    
+    @objc fileprivate func markerButtonTapped(_ sender: UIButton) {
+        
+        // Add the bottom colors view
+        setUpMarkerController()
         
     }
     
     // MARK: Helper
     
-    func setUpColorsController() {
+    func setUpPenController() {
         
         // Init colorsController
-        let colorsController = ColorsController()
+        let penController = PenController()
 
         // Add bottomSheetVC as a child view
-        addChild(colorsController)
-        view.addSubview(colorsController.view)
-        colorsController.didMove(toParent: self)
+        addChild(penController)
+        view.addSubview(penController.view)
+        penController.didMove(toParent: self)
 
         // Adjust colorsController frame and initial position
         let height = view.frame.height
         let width  = view.frame.width
-        colorsController.view.frame = CGRect(x: 0, y: view.frame.maxY, width: width, height: height)
+        penController.view.frame = CGRect(x: 0, y: view.frame.maxY, width: width, height: height)
+        
+    }
+    
+    func setUpMarkerController() {
+        
+        let markerController =  MarkerController()
+        
+        addChild(markerController)
+        view.addSubview(markerController.view)
+        markerController.didMove(toParent: self)
+
+        let height = view.frame.height
+        let width  = view.frame.width
+        markerController.view.frame = CGRect(x: 0, y: view.frame.maxY, width: width, height: height)
         
     }
     

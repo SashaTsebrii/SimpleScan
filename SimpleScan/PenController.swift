@@ -1,5 +1,5 @@
 //
-//  ColorsController.swift
+//  PenController.swift
 //  SimpleScan
 //
 //  Created by Aleksandr Tsebrii on 6/24/20.
@@ -8,14 +8,37 @@
 
 import UIKit
 
-class ColorsController: UIViewController {
+class PenController: UIViewController {
+    
+    // MARK: Properties
+    
+    fileprivate let holdView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 2
+        view.layer.masksToBounds = true
+        view.backgroundColor = .lightGray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     // MARK: Lifecycle
     
     override func loadView() {
         super.loadView()
         
-        view.backgroundColor = .clear
+        // Set up view
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.8)
+        view.layer.cornerRadius = 16
+        view.clipsToBounds = true
+        
+        // Set up holdView
+        view.addSubview(holdView)
+        NSLayoutConstraint.activate([
+            holdView.widthAnchor.constraint(equalToConstant: 64),
+            holdView.heightAnchor.constraint(equalToConstant: 4),
+            holdView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            holdView.topAnchor.constraint(equalTo: view.topAnchor, constant: 8)
+        ])
         
     }
     
@@ -29,9 +52,6 @@ class ColorsController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // Add blur and vibrancy effects
-        prepareBackgroundView()
         
     }
     
@@ -55,22 +75,6 @@ class ColorsController: UIViewController {
         let y = self.view.frame.minY
         self.view.frame = CGRect(x: 0, y: y + translation.y, width: view.frame.width, height: view.frame.height)
         recognizer.setTranslation(.zero, in: self.view)
-        
-    }
-    
-    // MARK: Helper
-    
-    func prepareBackgroundView() {
-        
-        let blurEffect = UIBlurEffect.init(style: .light)
-        let visualEffect = UIVisualEffectView.init(effect: blurEffect)
-        let bluredView = UIVisualEffectView.init(effect: blurEffect)
-        bluredView.contentView.addSubview(visualEffect)
-        
-        visualEffect.frame = UIScreen.main.bounds
-        bluredView.frame = UIScreen.main.bounds
-        
-        view.insertSubview(bluredView, at: 0)
         
     }
     
