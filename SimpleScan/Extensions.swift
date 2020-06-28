@@ -12,12 +12,12 @@ import UIKit
 
 extension UIView  {
     // Render the view within the view's bounds, then capture it as image
-  func asImage() -> UIImage {
-    let renderer = UIGraphicsImageRenderer(bounds: bounds)
-    return renderer.image(actions: { rendererContext in
-        layer.render(in: rendererContext.cgContext)
-    })
-  }
+    func asImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: bounds)
+        return renderer.image(actions: { rendererContext in
+            layer.render(in: rendererContext.cgContext)
+        })
+    }
 }
 
 // MARK: -
@@ -293,15 +293,15 @@ extension URL {
         }
         return nil
     }
-
+    
     var fileSize: UInt64 {
         return attributes?[.size] as? UInt64 ?? UInt64(0)
     }
-
+    
     var fileSizeString: String {
         return ByteCountFormatter.string(fromByteCount: Int64(fileSize), countStyle: .file)
     }
-
+    
     var creationDate: Date? {
         return attributes?[.creationDate] as? Date
     }
