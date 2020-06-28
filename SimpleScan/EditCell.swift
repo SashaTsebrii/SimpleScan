@@ -150,6 +150,7 @@ class EditCell: UICollectionViewCell {
     // MARK: Helper
     
     func drawDashLine(start p0: CGPoint, end p1: CGPoint, view: UIView) {
+        
         let shapeLayer = CAShapeLayer()
         shapeLayer.strokeColor = UIColor.lightGray.cgColor
         shapeLayer.lineWidth = 1
@@ -160,6 +161,7 @@ class EditCell: UICollectionViewCell {
         path.addLines(between: [p0, p1])
         shapeLayer.path = path
         view.layer.addSublayer(shapeLayer)
+        
     }
     
 }

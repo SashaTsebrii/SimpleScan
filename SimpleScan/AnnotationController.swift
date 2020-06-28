@@ -22,6 +22,7 @@ class AnnotationController: UIViewController {
         scrollView.backgroundColor = .white
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = true
+        
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
@@ -52,60 +53,22 @@ class AnnotationController: UIViewController {
     }()
     
     fileprivate let undoButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+        let button = UIButton(frame: .zero)
         button.setImage(UIImage(named: "undo"), for: .normal)
         button.addTarget(self, action: #selector(undoButtonTapped(_:)), for: .touchUpInside)
+        button.backgroundColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     let clearButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+        let button = UIButton(frame: .zero)
         button.setImage(UIImage(named: "clear"), for: .normal)
         button.addTarget(self, action: #selector(clearButtonTapped(_:)), for: .touchUpInside)
+        button.backgroundColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-//    let redButton: UIButton = {
-//        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
-//        button.layer.cornerRadius = 16
-//        button.layer.masksToBounds = true
-//        button.backgroundColor = .red
-//        button.layer.borderWidth = 1
-//        button.addTarget(self, action: #selector(handleColorChange(_:)), for: .touchUpInside)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        return button
-//    }()
-//    
-//    let greenButton: UIButton = {
-//        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
-//        button.layer.cornerRadius = 16
-//        button.layer.masksToBounds = true
-//        button.backgroundColor = .green
-//        button.layer.borderWidth = 1
-//        button.addTarget(self, action: #selector(handleColorChange(_:)), for: .touchUpInside)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        return button
-//    }()
-//    
-//    let blueButton: UIButton = {
-//        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
-//        button.layer.cornerRadius = 16
-//        button.layer.masksToBounds = true
-//        button.backgroundColor = .blue
-//        button.layer.borderWidth = 1
-//        button.addTarget(self, action: #selector(handleColorChange(_:)), for: .touchUpInside)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        return button
-//    }()
-//    
-//    let slider: UISlider = {
-//        let slider = UISlider()
-//        slider.minimumValue = 1
-//        slider.maximumValue = 10
-//        slider.addTarget(self, action: #selector(handleSliderChange(_:)), for: .valueChanged)
-//        return slider
-//    }()
     
     // MARK: Lifecycle
     
@@ -118,13 +81,31 @@ class AnnotationController: UIViewController {
         // Set background color
         view.backgroundColor = UIColor.Design.background
         
-        // Scroll view
+        // clearButton
+        view.addSubview(clearButton)
+        NSLayoutConstraint.activate([
+            clearButton.widthAnchor.constraint(equalToConstant: 44),
+            clearButton.heightAnchor.constraint(equalTo: clearButton.widthAnchor),
+            clearButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            clearButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        ])
+        
+        // undoButton
+        view.addSubview(undoButton)
+        NSLayoutConstraint.activate([
+            undoButton.widthAnchor.constraint(equalToConstant: 44),
+            undoButton.heightAnchor.constraint(equalTo: undoButton.widthAnchor),
+            undoButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            undoButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+        
+        // scrollView
         view.addSubview(scrollView)
         NSLayoutConstraint.activate([
             scrollView.heightAnchor.constraint(equalToConstant: 44),
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            scrollView.leadingAnchor.constraint(equalTo: clearButton.trailingAnchor, constant: 1),
+            scrollView.trailingAnchor.constraint(equalTo: undoButton.leadingAnchor, constant: -1)
         ])
         
         // Content view
@@ -138,7 +119,7 @@ class AnnotationController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
         ])
         
-        // Set penButton
+        // penButton
         let penButton = UIButton(frame: .zero)
         penButton.setImage(UIImage(named: "pen"), for: .normal)
         penButton.addTarget(self, action: #selector(penButtonTapped(_:)), for: .touchUpInside)
@@ -152,7 +133,7 @@ class AnnotationController: UIViewController {
             penButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
-        // Set markerButton
+        // markerButton
         let markerButton = UIButton(frame: .zero)
         markerButton.setImage(UIImage(named: "marker"), for: .normal)
         markerButton.addTarget(self, action: #selector(markerButtonTapped(_:)), for: .touchUpInside)
@@ -183,28 +164,6 @@ class AnnotationController: UIViewController {
             canvasView.trailingAnchor.constraint(equalTo: pdfView.trailingAnchor),
             canvasView.bottomAnchor.constraint(equalTo: pdfView.bottomAnchor)
         ])
-        
-//        let colorsStack = UIStackView(arrangedSubviews: [redButton, greenButton, blueButton])
-//        colorsStack.spacing = 4
-//        colorsStack.distribution = .fillEqually
-//        colorsStack.translatesAutoresizingMaskIntoConstraints = false
-//        
-//        let buttonsStack = UIStackView(arrangedSubviews: [undoButton, clearButton])
-//        buttonsStack.spacing = 4
-//        buttonsStack.distribution = .fillEqually
-//        buttonsStack.translatesAutoresizingMaskIntoConstraints = false
-//        
-//        let generalStack = UIStackView(arrangedSubviews: [buttonsStack, colorsStack, slider])
-//        generalStack.spacing = 8
-//        generalStack.distribution = .fillEqually
-//        generalStack.translatesAutoresizingMaskIntoConstraints = false
-//        
-//        view.addSubview(generalStack)
-//        NSLayoutConstraint.activate([
-//            generalStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-//            generalStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-//            generalStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-//        ])
         
         // Create save bar button item
         let saveButton = UIButton(frame: .zero)
