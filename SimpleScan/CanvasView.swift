@@ -15,6 +15,7 @@ class CanvasView: UIView {
     fileprivate var lines = [Line]()
     fileprivate var strokeColor = UIColor.black
     fileprivate var strokeWidth: Float = 1
+    fileprivate var opacity: Float = 1
     
     // MARK: Public function
         

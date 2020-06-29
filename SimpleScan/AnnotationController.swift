@@ -221,8 +221,6 @@ class AnnotationController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        
-        
     }
     
     // MARK: Actions
@@ -238,14 +236,6 @@ class AnnotationController: UIViewController {
     @objc func clearButtonTapped(_ sender: UIButton) {
         canvasView.clear()
     }
-    
-//    @objc fileprivate func handleColorChange(_ sender: UIButton) {
-//        canvasView.setStrokeColor(color: sender.backgroundColor ?? .black)
-//    }
-//    
-//    @objc fileprivate func handleSliderChange(_ sender: UISlider) {
-//        canvasView.setStrokeWidth(width: sender.value)
-//    }
     
     @objc fileprivate func penButtonTapped(_ sender: UIButton) {
         
@@ -283,6 +273,7 @@ class AnnotationController: UIViewController {
     func setUpMarkerController() {
         
         let markerController =  MarkerController()
+        markerController.delegate = self
         
         addChild(markerController)
         view.addSubview(markerController.view)
@@ -291,6 +282,19 @@ class AnnotationController: UIViewController {
         let height = view.frame.height
         let width  = view.frame.width
         markerController.view.frame = CGRect(x: 0, y: view.frame.maxY, width: width, height: height)
+        
+    }
+    
+}
+
+extension AnnotationController: MarkerControllerDelegate {
+    
+    // MARK: MarkerControllerDelegate
+    
+    func markerParameter(color: UIColor, thinkness: CGFloat, opacity: CGFloat) {
+        
+        canvasView.setStrokeColor(color: color)
+        canvasView.setStrokeWidth(width: Float(thinkness))
         
     }
     

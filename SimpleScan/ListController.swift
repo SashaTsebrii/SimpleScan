@@ -70,7 +70,7 @@ class ListController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -142,7 +142,7 @@ class ListController: UIViewController {
             self.present(alertController, animated: true, completion: nil)
             
         }
-
+        
         // Here we specify the "destructive" attribute to show that it’s destructive in nature
         // UIImage(systemName: "trash")
         let delete = UIAction(title: "Delete", image: UIImage(named: "delete"), attributes: .destructive) { action in
@@ -167,23 +167,23 @@ class ListController: UIViewController {
             self.present(alertController, animated: true, completion: nil)
             
         }
-
+        
         // The "title" will show up as an action for opening this menu
         let edit = UIMenu(title: "Edit...", children: [rename, delete])
-
+        
         // Create a UIAction for sharing
         // UIImage(systemName: "square.and.arrow.up")
         let share = UIAction(title: "Share", image: UIImage(named: "share_appearances")) { action in
             // Show system share sheet
             
             if let idString = document.idString {
-
+                
                 let fileManager = FileManager.default
                 if let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
-
+                    
                     let docURL = documentDirectory.appendingPathComponent(idString)
                     if fileManager.fileExists(atPath: docURL.path) {
-
+                        
                         if let pdfData = NSData(contentsOf: docURL) {
                             
                             // Set up activity view controller
@@ -191,29 +191,29 @@ class ListController: UIViewController {
                             
                             // So that iPads won't crash
                             activityViewController.popoverPresentationController?.sourceView = self.view
-
+                            
                             // Exclude some activity types from the list (optional)
                             activityViewController.excludedActivityTypes = []
-
+                            
                             // Present the view controller
                             self.present(activityViewController, animated: true, completion: nil)
                             
                         } else {
                             print("Error data from URL")
                         }
-
+                        
                     } else {
                         print("Error load file from URL")
                     }
-
+                    
                 }
-
+                
             } else {
                 print("Error no document")
             }
             
         }
-
+        
         // Create and return a UIMenu with a actions
         let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let documentURL = documentDirectory.appendingPathComponent(document.idString!)
@@ -223,31 +223,31 @@ class ListController: UIViewController {
     }
     
     // MARK: CoreData
+    
+    func retrieveData() {
         
-        func retrieveData() {
-            
-            // Get reference to AppDelegate
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-            
-            // Create a context
-            let managedContext = appDelegate.persistentContainer.viewContext
-            
-            // Prepare the request of type NSFetchRequest for the entity
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
-            
-            // Get data from CoreData only with nameString equal "No name"
-            // fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
-            // Get data sorting by "createDateString"
-            fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: Constants.kDocument.createDateString, ascending: false)]
-            
-            do {
-                documents = try managedContext.fetch(fetchRequest) as! [Document]
-            } catch {
-                print("Failed")
-            }
-            
+        // Get reference to AppDelegate
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        // Create a context
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        // Prepare the request of type NSFetchRequest for the entity
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.kDocument.entityName)
+        
+        // Get data from CoreData only with nameString equal "No name"
+        // fetchRequest.predicate = NSPredicate(format: "\(Constants.kDocument.nameString) = %@", "No name")
+        // Get data sorting by "createDateString"
+        fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: Constants.kDocument.createDateString, ascending: false)]
+        
+        do {
+            documents = try managedContext.fetch(fetchRequest) as! [Document]
+        } catch {
+            print("Failed")
         }
         
+    }
+    
     func updateData(byIndex index: Int, with name: String) {
         
         // Get reference to AppDelegatesrefer
@@ -373,7 +373,7 @@ extension ListController: UICollectionViewDataSource, UICollectionViewDelegate, 
         return itemSize
         
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
         var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
@@ -389,7 +389,7 @@ extension ListController: UICollectionViewDataSource, UICollectionViewDelegate, 
         return edgeInsets
         
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         
         var interitemSpacing: CGFloat = 0
@@ -405,7 +405,7 @@ extension ListController: UICollectionViewDataSource, UICollectionViewDelegate, 
         return interitemSpacing
         
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
         var lineSpacing: CGFloat = 0
