@@ -14,7 +14,7 @@ class EditController: UIViewController {
     // MARK: Variables
     
     var document: Document?
-    fileprivate var pdfDocument: PDFDocument?
+    fileprivate var pdfPages: [PDFPage] = []
     
     // MARK: Prpperties
     
@@ -22,6 +22,9 @@ class EditController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.dataSource = self
         collectionView.delegate = self
+//        collectionView.dragDelegate = self
+//        collectionView.dropDelegate = self
+        collectionView.dragInteractionEnabled = true
         collectionView.register(EditCell.self, forCellWithReuseIdentifier: EditCell.identifier)
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .clear
@@ -71,7 +74,11 @@ class EditController: UIViewController {
                 if fileManager.fileExists(atPath: docURL.path) {
                     
                     if let pdfDocument = PDFDocument(url: docURL) {
-                        self.pdfDocument = pdfDocument
+                        for index in 0...(pdfDocument.pageCount - 1) {
+                            if let page = pdfDocument.page(at: index) {
+                                pdfPages.append(page)
+                            }
+                        }
                         self.collectionView.reloadData()
                     } else {
                         print("Error no document")
@@ -87,6 +94,9 @@ class EditController: UIViewController {
             print("Error no document")
         }
         
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLognPressGesture(_ :)))
+        collectionView.addGestureRecognizer(longPressGesture)
+        
     }
     
     // MARK: Actions
@@ -97,9 +107,29 @@ class EditController: UIViewController {
         
     }
     
+    // MARK: Gesture
+    
+    @objc fileprivate func handleLognPressGesture(_ sender: UILongPressGestureRecognizer) {
+        
+        switch sender.state {
+        case .began:
+            guard let targetIndexPath = collectionView.indexPathForItem(at: sender.location(in: collectionView)) else {
+                return
+            }
+            collectionView.beginInteractiveMovementForItem(at: targetIndexPath)
+        case .changed:
+            collectionView.updateInteractiveMovementTargetPosition(sender.location(in: collectionView))
+        case .ended:
+            collectionView.endInteractiveMovement()
+        default:
+            collectionView.cancelInteractiveMovement()
+        }
+        
+    }
+    
 }
 
-extension EditController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension EditController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout /*UICollectionViewDragDelegate, UICollectionViewDropDelegate*/ {
     
     // MARK: UICollectionViewDataSource
     
@@ -108,11 +138,7 @@ extension EditController: UICollectionViewDataSource, UICollectionViewDelegate, 
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let pageCount = pdfDocument?.pageCount {
-            return pageCount
-        } else {
-            return 0
-        }
+        return pdfPages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -121,10 +147,10 @@ extension EditController: UICollectionViewDataSource, UICollectionViewDelegate, 
             fatalError("Unexpected cell instead of ListCell")
         }
         
-        if let pdfDocument = pdfDocument {
-            let page = pdfDocument.page(at: indexPath.row)
+        if pdfPages.count > 0 {
+            let page = pdfPages[indexPath.row]
             cell.page = page
-            cell.pageOfPages = (indexPath.row, pdfDocument.pageCount)
+            cell.pageOfPages = (indexPath.row, pdfPages.count)
             cell.delegate = self
         }
         
@@ -205,6 +231,54 @@ extension EditController: UICollectionViewDataSource, UICollectionViewDelegate, 
         return lineSpacing
         
     }
+    
+    // MARK:  UICollectionViewDragDelegate
+    
+//    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+//        let item = collectionView == collectionView1 ? self.items1[indexPath.row] : self.items2[indexPath.row]
+//        let itemProvider = NSItemProvider(object: item as NSString)
+//        let dragItem = UIDragItem(itemProvider: itemProvider)
+//        dragItem.localObject = item
+//        return [dragItem]
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
+//        let item = collectionView == collectionView1 ? self.items1[indexPath.row] : self.items2[indexPath.row]
+//        let itemProvider = NSItemProvider(object: item as NSString)
+//        let dragItem = UIDragItem(itemProvider: itemProvider)
+//        dragItem.localObject = item
+//        return [dragItem]
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+//        if collectionView == collectionView1 {
+//            let previewParameters = UIDragPreviewParameters()
+//            previewParameters.visiblePath = UIBezierPath(rect: CGRect(x: 25, y: 25, width: 120, height: 120))
+//            return previewParameters
+//        }
+//        return nil
+//    }
+    
+    // MARK: UICollectionViewDropDelegate
+    
+//    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+//
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+//        return true
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//
+//        if let pdfDocument = pdfDocument {
+//            if let page = pdfDocument.page(at: sourceIndexPath.row) {
+//                pdfDocument.removePage(at: sourceIndexPath.row)
+//                pdfDocument.insert(page, at: destinationIndexPath.row)
+//            }
+//        }
+//
+//    }
     
 }
 
